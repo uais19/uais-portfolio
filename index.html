@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  LESSON 1 — <!DOCTYPE html>
+
+  This MUST be the very first line of every HTML file. It is not a tag and it
+  is not HTML - it is an instruction to the browser that says "read this file
+  using modern HTML5 rules".
+
+  If you forget it, the browser switches into "quirks mode": it pretends to be
+  Internet Explorer 5 from 1999 and your layout silently breaks in ways that
+  are very hard to debug. This is a classic exam question.
+  ============================================================================
+-->
+
+<!--
+  ============================================================================
+  LESSON 2 — <html> and the lang attribute
+
+  <html> is the ROOT element. Everything else lives inside it. A document has
+  exactly one <html> element and it has exactly two children: <head> and <body>.
+
+  lang="en" declares the language of the page. It is not decoration:
+    - screen readers use it to pick the correct pronunciation
+    - Chrome uses it to offer "Translate this page"
+    - search engines use it to show your page to the right people
+  The Russian version of this page uses lang="ru".
+  ============================================================================
+-->
+<html lang="en">
+
+<!--
+  ============================================================================
+  LESSON 3 — <head> vs <body>
+
+  <head>  = information ABOUT the page. The visitor never sees it directly.
+  <body>  = the actual visible content.
+
+  Beginners put visible text in <head> and wonder why nothing appears.
+  Remember: head = metadata, body = content.
+  ============================================================================
+-->
+<head>
+
+  <!--
+    LESSON 4 — <meta charset="UTF-8">  *** THE MOST IMPORTANT LINE HERE ***
+
+    "Character encoding" is the table the browser uses to turn the bytes in the
+    file into letters on screen. UTF-8 is the table that contains every writing
+    system: Latin, Cyrillic, Kazakh (ә, ғ, қ, ң, ө, ұ, ү, һ, і), Chinese, emoji.
+
+    Without this line the browser guesses, usually guesses an old Western table,
+    and your Cyrillic text renders as ????  or  ÐŸÑ€Ð¸Ð²ÐµÑ‚
+
+    It must appear within the first 1024 bytes of the file, which is why it is
+    the first thing inside <head>.
+  -->
+  <meta charset="UTF-8">
+
+  <!--
+    LESSON 5 — the viewport meta tag
+
+    Mobile browsers pretend the screen is ~980px wide and then zoom out, so an
+    unprepared site looks like a tiny unreadable postcard on a phone.
+
+    This line says: "the page is as wide as the actual device, start at zoom 1".
+    Without it, no amount of CSS will make your site look right on a phone.
+    You are not writing CSS yet, but this line belongs here from day one.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--
+    LESSON 6 — the description meta tag
+
+    This is the grey summary line under your link in Google search results.
+    Google does not use it for ranking, but a human decides whether to click
+    based on it. Aim for about 150 characters.
+  -->
+  <meta name="description" content="Portfolio of Leskhan Uais: diplomas and certificates from sport competitions, academic olympiads and project contests.">
+
+  <!--
+    LESSON 7 — <title>
+
+    The single most reused piece of text on your site. It appears in:
+      - the browser tab
+      - the bookmark name when someone saves your page
+      - the big blue headline in Google search results
+      - the preview card when someone shares your link in WhatsApp/Telegram
+
+    Tabs truncate from the RIGHT, so put the important word (your name) FIRST.
+    That is why this is "Leskhan Uais - Portfolio" and not "Portfolio of ...".
+  -->
+  <title>Leskhan Uais — Portfolio</title>
+
+  <!--
+    LESSON 8 — <link rel="alternate" hreflang="...">
+
+    This tells search engines: "the same page exists in another language, here".
+    Google then shows the Russian version to Russian-speaking users and the
+    English version to everyone else, instead of treating them as duplicates.
+
+    Note that <link> is a VOID element - see Lesson 12 further down.
+  -->
+  <link rel="alternate" hreflang="ru" href="ru.html">
+  <link rel="alternate" hreflang="en" href="index.html">
+
+</head>
+
+<!--
+  ============================================================================
+  LESSON 9 — SEMANTIC HTML  *** THE #1 TOPIC IN HTML EXAMS ***
+
+  You could build this entire page out of <div> elements. It would look
+  identical. So why don't we?
+
+  Because <div> means NOTHING. It is a generic box. A page made of divs is
+  called "div soup" and it is unreadable to every machine that visits it.
+
+  Semantic tags carry MEANING:
+
+    <header>   introduction / top of a page or section
+    <nav>      a block of navigation links
+    <main>     the main content - ONE per page, and never inside header/footer
+    <section>  a thematic group of content, normally with a heading
+    <article>  a self-contained item that would still make sense on its own
+    <figure>   an image + its caption, treated as one unit
+    <footer>   closing information
+
+  Why it matters in practice:
+    - a blind visitor's screen reader can jump straight to <main>, skipping
+      the navigation, because it knows what <main> is
+    - Google understands the structure of your page and ranks it better
+    - another programmer reading your code instantly knows what each part is
+
+  Rule of thumb for tests: use a <div> ONLY when no semantic tag fits and you
+  just need a container to hang CSS on.
+  ============================================================================
+-->
+<body>
+
+  <header>
+    <!--
+      LESSON 10 — HEADING HIERARCHY (h1 to h6)
+
+      Headings are an OUTLINE, not a font-size picker. Three hard rules:
+
+        1. Exactly ONE <h1> per page. It is the title of the whole document.
+        2. Never skip a level. h1 then h3 with no h2 between them is an error.
+        3. Never choose a heading because of how big it looks. That is CSS's
+           job. Choose it because of what level of the outline it represents.
+
+      Our outline here is:
+        h1  Leskhan Uais              (the page)
+         h2  Sport                    (a section)
+          h3  Specific competition    (one achievement inside that section)
+    -->
+    <h1>Leskhan Uais</h1>
+
+    <p>Student · Athlete · Olympiad participant · Project builder</p>
+
+    <!--
+      LESSON 11 — LINKS AND PATHS  *** SECOND BIGGEST EXAM TOPIC ***
+
+      <a> means "anchor". The href attribute says where it goes.
+      There are three kinds of path, and knowing the difference is essential:
+
+        href="ru.html"              RELATIVE path - "a file next to me in the
+                                    same folder". Works on your computer AND on
+                                    the server without any change. Use this.
+
+        href="/ru.html"             ROOT-relative - "from the top of the site".
+                                    Works on a server, but breaks when you open
+                                    the file directly from your Desktop.
+
+        href="https://google.com"   ABSOLUTE path - a full address on another
+                                    site.
+
+      Relative paths are the reason you can zip this folder, upload it anywhere,
+      and every link still works. Never hardcode C:\Users\... into href.
+    -->
+    <p><a href="ru.html">Русская версия</a></p>
+  </header>
+
+  <!--
+    LESSON 11b — IN-PAGE LINKS (fragment identifiers)
+
+    href="#sport" does not load a new page. The # means "find the element on
+    THIS page whose id is sport, and scroll to it".
+
+    Two rules about id:
+      - an id must be UNIQUE in the whole document (unlike class, which can
+        repeat as many times as you like)
+      - it is case-sensitive: #Sport will not find id="sport"
+
+    Later, when we add smooth scrolling animations between sections, these ids
+    are exactly what the CSS and JavaScript will hook onto.
+  -->
+  <nav>
+    <ul>
+      <li><a href="#about">About me</a></li>
+      <li><a href="#sport">Sport</a></li>
+      <li><a href="#olympiads">Olympiads</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- <main> holds the unique content of this page. Only one per document. -->
+  <main>
+
+    <!-- ==================================================================
+         SECTION: ABOUT ME
+         This is where your personal statement material goes. Admissions
+         officers read this first. Replace the placeholder text below.
+         ================================================================== -->
+    <section id="about">
+      <h2>About me</h2>
+
+      <!--
+        LESSON 14 — BLOCK vs INLINE elements
+
+        BLOCK elements start on a new line and take the full available width:
+          <p> <div> <h1>-<h6> <section> <article> <ul> <li> <figure> <header>
+
+        INLINE elements sit inside a line of text and are only as wide as their
+        content:
+          <a> <span> <strong> <em> <img> <time> <code> <br>
+
+        The practical rule you get tested on: you may put an inline element
+        inside a block element, but NEVER put a block element inside <p>.
+        <p><div>text</div></p> is invalid HTML and browsers will silently
+        rearrange your page to fix it.
+      -->
+      <p>
+        REPLACE THIS TEXT. Write two or three paragraphs about yourself: where you
+        study, what subjects you love, what you want to study at university and why.
+        Admissions officers are reading for motivation and consistency, not for a
+        list of adjectives.
+      </p>
+
+      <p>
+        REPLACE THIS TEXT. A good second paragraph explains what connects your
+        achievements. For example: how sport taught you discipline that you then
+        applied to olympiad preparation, or how a project grew out of a problem you
+        personally ran into.
+      </p>
+
+      <!--
+        <strong> and <em> are semantic too, and this is a common test trap:
+          <strong> = importance      <b> = just bold pixels, no meaning
+          <em>     = emphasis        <i> = just italic pixels, no meaning
+        A screen reader changes its tone for <strong>/<em> and ignores <b>/<i>.
+        So prefer <strong> and <em>.
+      -->
+      <p>Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
+    </section>
+
+
+    <!-- ==================================================================
+         SECTION: SPORT
+         ================================================================== -->
+    <section id="sport">
+      <h2>Sport</h2>
+
+      <p>Competitions, tournaments and sport achievements.</p>
+
+      <!--
+        vvv  COPY EVERYTHING BETWEEN THESE MARKERS TO ADD A NEW ACHIEVEMENT  vvv
+
+        LESSON 9b — why <article> and not <div>?
+
+        <article> means "a self-contained piece of content that would still make
+        sense if you cut it out and pasted it somewhere else". One diploma is
+        exactly that. A news story, a blog post, a product card, a comment - all
+        <article>.
+
+        class="achievement" is a HOOK. Unlike id, a class can repeat on many
+        elements. When we add animations later, one CSS rule targeting
+        .achievement will animate every single achievement on the site at once.
+        Adding it now costs nothing and saves rewriting the markup later.
+      -->
+      <article class="achievement">
+
+        <h3>EXAMPLE — City Judo Championship, 2nd place</h3>
+
+        <!--
+          LESSON 15 — <time> and the datetime attribute
+
+          Humans read "14 March 2025". Computers cannot parse that reliably -
+          is 03/04/2025 the 3rd of April or the 4th of March? It depends on the
+          country. So <time> carries BOTH:
+
+            datetime="2025-03-14"   the machine-readable ISO 8601 form,
+                                    always YYYY-MM-DD, never ambiguous
+            14 March 2025           the human-readable form
+
+          Search engines use this to show dates correctly in results.
+        -->
+        <p>
+          <time datetime="2025-03-14">14 March 2025</time> ·
+          Almaty ·
+          City Sport Department
+        </p>
+
+        <p>
+          REPLACE THIS. One or two sentences: what the competition was, how many
+          participants, what you personally did. Concrete numbers are far more
+          convincing than adjectives — "2nd of 48 participants" beats "did very well".
+        </p>
+
+        <!--
+          LESSON 16 — <figure> and <figcaption>
+
+          <figure> groups an image with its caption so that they are treated as
+          ONE unit. If you just write <img> followed by <p>Some caption</p>,
+          nothing in the HTML says those two things belong together.
+          <figcaption> makes the relationship explicit and machine-readable.
+        -->
+        <figure>
+
+          <!--
+            ============================================================
+            LESSON 17 — THE <img> TAG  *** EXAM FAVOURITE ***
+            ============================================================
+
+            src   = the path to the image file. Relative, just like href.
+                    "images/sport-judo-2025.jpg" means "go into the images
+                    folder that sits next to this HTML file, take that file".
+
+            alt   = alternative text. This is NOT optional and NOT a tooltip.
+                    It is the text that:
+                      - a blind user's screen reader reads out loud
+                      - appears on screen if the image fails to load
+                      - search engines use to understand the picture
+                    Write what the image SHOWS, as a sentence. Not "diploma.jpg",
+                    not "photo". Try it: break the src path on purpose, reload,
+                    and watch your alt text appear in place of the image.
+
+            width / height
+                  = the image's real pixel size. The browser reserves exactly
+                    that much space BEFORE the image finishes downloading, so
+                    the page does not jump around while loading. This annoying
+                    jump has a name you may be tested on: Cumulative Layout
+                    Shift (CLS).
+
+            loading="lazy"
+                  = do not download this image until the user scrolls near it.
+                    On a page with 20 diplomas this is the difference between
+                    loading in 1 second and loading in 15.
+
+            HOW TO ADD YOUR OWN IMAGE:
+              1. Put the file into the "images" folder next to this file.
+              2. Name it in lowercase Latin with hyphens, no spaces and no
+                 Cyrillic: sport-judo-2025.jpg
+                 (the filename becomes part of the public web address, and
+                 spaces turn into ugly %20 while Cyrillic turns into %D0%94)
+              3. Change src below to match that filename exactly, including
+                 the extension. Web servers are case-sensitive: Photo.JPG and
+                 photo.jpg are two different files on Linux, even though
+                 Windows treats them as the same. This bug bites everyone once.
+              4. Update alt, width and height to match the real image.
+          -->
+          <img src="images/example-replace-me.jpg"
+               alt="Diploma for 2nd place at the City Judo Championship, 2025"
+               width="800"
+               height="1100"
+               loading="lazy">
+
+          <figcaption>Diploma — City Judo Championship, 2025</figcaption>
+        </figure>
+
+      </article>
+      <!-- ^^^  END OF ONE ACHIEVEMENT BLOCK  ^^^ -->
+
+      <article class="achievement">
+        <h3>EXAMPLE — Regional Athletics Tournament, participant</h3>
+        <p>
+          <time datetime="2024-10-05">5 October 2024</time> ·
+          Almaty Region ·
+          Regional Sport Federation
+        </p>
+        <p>REPLACE THIS with a short description of the event and your result.</p>
+        <figure>
+          <img src="images/example-replace-me-2.jpg"
+               alt="Certificate of participation in the Regional Athletics Tournament, 2024"
+               width="1100"
+               height="800"
+               loading="lazy">
+          <figcaption>Certificate of participation — Regional Athletics Tournament, 2024</figcaption>
+        </figure>
+      </article>
+
+    </section>
+
+
+    <!-- ==================================================================
+         SECTION: OLYMPIADS
+         ================================================================== -->
+    <section id="olympiads">
+      <h2>Olympiads</h2>
+
+      <p>Academic olympiads and subject competitions.</p>
+
+      <article class="achievement">
+        <h3>EXAMPLE — Republican Informatics Olympiad, 1st place</h3>
+        <p>
+          <time datetime="2025-02-20">20 February 2025</time> ·
+          Astana ·
+          Ministry of Education
+        </p>
+        <p>
+          REPLACE THIS. For olympiads, say which round it was (school, city,
+          regional, republican, international), the subject, and your placement
+          out of how many competitors.
+        </p>
+        <figure>
+          <img src="images/example-replace-me-3.jpg"
+               alt="Diploma for 1st place at the Republican Informatics Olympiad, 2025"
+               width="800"
+               height="1100"
+               loading="lazy">
+          <figcaption>Diploma — Republican Informatics Olympiad, 2025</figcaption>
+        </figure>
+      </article>
+
+    </section>
+
+
+    <!-- ==================================================================
+         SECTION: PROJECTS
+         ================================================================== -->
+    <section id="projects">
+      <h2>Projects</h2>
+
+      <p>Project competitions, science fairs, hackathons and things I built.</p>
+
+      <article class="achievement">
+        <h3>EXAMPLE — School Science Fair, winner</h3>
+        <p>
+          <time datetime="2025-04-12">12 April 2025</time> ·
+          Almaty ·
+          School No. 000
+        </p>
+        <p>
+          REPLACE THIS. For projects, describe the PROBLEM you solved, not just
+          the technology. "An app that helps students track homework deadlines,
+          used by 60 classmates" is far stronger than "made an app in Python".
+        </p>
+
+        <!--
+          LESSON 11c — target and rel
+
+          target="_blank"  opens the link in a NEW browser tab.
+          rel="noopener"   is a SECURITY requirement whenever you use _blank.
+
+          Without noopener, the page you link to gets a JavaScript reference
+          back to your page (window.opener) and can redirect your tab to a fake
+          login page. This is called tabnabbing. Modern browsers now add
+          noopener automatically, but writing it is still the correct habit and
+          it is a known interview/exam question.
+        -->
+        <p>
+          Link:
+          <a href="https://example.com" target="_blank" rel="noopener">
+            REPLACE — link to the project, GitHub repo or a video
+          </a>
+        </p>
+
+        <figure>
+          <img src="images/example-replace-me-4.jpg"
+               alt="Winner's diploma from the School Science Fair, 2025"
+               width="800"
+               height="1100"
+               loading="lazy">
+          <figcaption>Diploma — School Science Fair, 2025</figcaption>
+        </figure>
+      </article>
+
+    </section>
+
+
+    <!-- ==================================================================
+         SECTION: CONTACT
+         ================================================================== -->
+    <section id="contact">
+      <h2>Contact</h2>
+
+      <!--
+        LESSON 11d — the mailto: protocol
+
+        href="mailto:someone@example.com" opens the visitor's email program with
+        the address already filled in. Same idea: tel: starts a phone call.
+
+        A warning worth knowing: putting your email in plain text on a public
+        website means spam robots will find it. That is a real trade-off, not a
+        reason to panic - for an admissions portfolio, being reachable matters
+        more.
+      -->
+      <ul>
+        <li>Email: <a href="mailto:REPLACE@example.com">REPLACE@example.com</a></li>
+        <li>GitHub: <a href="https://github.com/REPLACE" target="_blank" rel="noopener">github.com/REPLACE</a></li>
+        <li>Telegram: <a href="https://t.me/REPLACE" target="_blank" rel="noopener">@REPLACE</a></li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!--
+    LESSON 18 — HTML COMMENTS
+
+    Everything between the arrows is invisible on the page. Use comments to
+    explain WHY something is written a certain way, not WHAT it obviously does.
+
+    *** IMPORTANT WARNING ***
+    Comments are NOT private. Anyone can press Ctrl+U on your live site and read
+    every single one of these lessons. Never put passwords, private notes, or
+    anything embarrassing in an HTML comment. Real websites have leaked
+    credentials exactly this way.
+
+    Because of that: when this site is finished and you deploy it publicly, you
+    may want to keep a commented "learning" copy for yourself and strip the
+    comments from the published version.
+  -->
+  <footer>
+    <p>© 2026 Leskhan Uais</p>
+  </footer>
+
+</body>
+</html>
+
+<!--
+  ============================================================================
+  LESSON 12 — VOID (SELF-CLOSING) ELEMENTS
+
+  Most tags come in pairs that wrap content:      <p>text</p>
+  A few have no content at all and never get a closing tag. These are called
+  void elements:
+
+      <meta>  <link>  <img>  <br>  <hr>  <input>
+
+  Writing </img> or </br> is simply wrong. You may see <br /> with a slash in
+  older code or in XHTML/React - in HTML5 the slash is allowed but pointless.
+
+
+  LESSON 13 — WHY THIS FILE IS CALLED index.html
+
+  When someone visits  https://your-site.vercel.app/  with no filename, the web
+  server has to decide what to send. Every web server on earth is configured to
+  look for "index.html" first.
+
+  That is the entire reason for the name. If you renamed this file to home.html,
+  visitors would get a 404 error unless they typed the full
+  https://your-site.vercel.app/home.html
+
+  So: the front page is ALWAYS index.html. Other pages can be named freely,
+  which is why the Russian version can be ru.html.
+  ============================================================================
+-->

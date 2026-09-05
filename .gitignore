@@ -1,0 +1,14 @@
+# Windows / OneDrive junk
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# macOS junk
+.DS_Store
+
+# Editor folders
+.vscode/
+.idea/
+
+# Vercel (created later, when you deploy)
+.vercel/
