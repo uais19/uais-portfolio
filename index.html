@@ -104,6 +104,51 @@
   <link rel="alternate" hreflang="ru" href="ru.html">
   <link rel="alternate" hreflang="en" href="index.html">
 
+  <!--
+    LESSON 19 — LOADING FONTS AND STYLES
+
+    <link> connects this HTML file to an external resource. Notice that all
+    three links below are the same tag doing different jobs, controlled by the
+    rel ("relationship") attribute.
+
+    preconnect
+      A performance hint, not a download. It tells the browser "you will need
+      to talk to this server in a moment, start the DNS lookup and the secure
+      handshake NOW". That handshake costs ~100-300ms, so doing it early means
+      the font starts downloading the instant it is actually requested.
+      Google Fonts serves the CSS from fonts.googleapis.com but the actual font
+      files from fonts.gstatic.com, which is why there are two.
+      The crossorigin attribute is required on the gstatic one because font
+      files are fetched under stricter CORS rules than stylesheets.
+
+    stylesheet
+      An actual CSS file to download and apply.
+
+    ORDER MATTERS. Fonts come before style.css because CSS applies in the order
+    it is loaded, and later rules of equal specificity win. Our stylesheet uses
+    the font families the Google Fonts sheet defines, so that sheet must arrive
+    first.
+
+    display=swap (at the end of the Google Fonts URL) tells the browser: show
+    the text immediately in a fallback font, then swap in the real font when it
+    arrives. Without it, text stays INVISIBLE while the font downloads - a
+    problem with a name you may be tested on: FOIT, Flash Of Invisible Text.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;800&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+
+  <!--
+    Our own stylesheet. It lives in a SEPARATE FILE rather than in a <style>
+    block, for three reasons:
+      1. both index.html and ru.html can share it - one edit styles both pages
+      2. the browser downloads it once and caches it, so the second page loads
+         faster
+      3. structure (HTML) and presentation (CSS) stay separated, which is the
+         principle this whole exercise is built on
+  -->
+  <link rel="stylesheet" href="style.css">
+
 </head>
 
 <!--
