@@ -193,11 +193,10 @@
       3. Never choose a heading because of how big it looks. That is CSS's
          job. Choose it because of what level of the outline it represents.
 
-    NOTE — the <h1> used to live here in the header. In the approved design it
-    moves into the "hero" block at the top of <main>, which is built in a later
-    step. Until then this page has NO h1, which is a real (temporary) defect:
-    a screen reader and Google both lose the document title. It comes back with
-    the hero.
+    NOTE — the <h1> is NOT in this header. In the approved design it lives in
+    the "hero" block at the top of <main>, a few screens down in this file.
+    That is deliberate: a header is for navigation, so the document title
+    belongs with the content it titles. There is still exactly one <h1>.
   -->
 
   <!--
@@ -310,16 +309,98 @@
     <a href="#contact">Contact</a>
   </div>
 
-  <!-- <main> holds the unique content of this page. Only one per document. -->
-  <main>
+  <!--
+    <main> holds the unique content of this page. Only one per document.
+
+    id="top" is the target of the brand logo link in the header (href="#top").
+    Without it that link points at nothing and clicking the logo does nothing.
+  -->
+  <main id="top">
+
+    <!-- ==================================================================
+         SECTION: HERO — the first screen
+
+         LESSON 25 — .wrap, AND WHY LAYOUT LIVES IN A SEPARATE ELEMENT
+
+         Every section carries two classes, e.g. class="hero wrap":
+
+           hero   what this section IS      (its own spacing and type sizes)
+           wrap   how wide its content is   (max-width + centering + padding)
+
+         .wrap is defined once in style.css and reused by every section. That
+         is why all the content on the page lines up on the same left edge: one
+         rule, not twelve. Splitting "what it is" from "how wide it is" is the
+         core idea behind utility classes, and you will meet it again in
+         frameworks like Tailwind.
+         ================================================================== -->
+    <section class="hero wrap">
+
+      <!-- The small uppercase line above the title. Styled by .eyebrow. -->
+      <p class="eyebrow">Kazakhstan</p>
+
+      <!--
+        The <h1> is back, and this is where it belongs.
+
+        In LESSON 10 (up in the header) the rule was: exactly one <h1> per page,
+        and it names the whole document. The header's job is navigation, so the
+        title lives here at the top of <main> instead.
+
+        id="heroTitle" is currently unused. It is the hook the word-by-word
+        animation will attach to in the animation step, so it is kept in place.
+      -->
+      <h1 id="heroTitle">Portfolio of Leskhan Uais</h1>
+
+      <!-- .lede = the introductory paragraph. Capped at 56 characters wide by
+           style.css, because long lines of text are genuinely harder to read. -->
+      <p class="lede">A personal archive: diplomas from school, sport and clubs, contest certificates and projects that shipped. Every entry carries a scan of the original, a date, the organiser and the result.</p>
+
+      <!--
+        LESSON 26 — <b> WITHOUT MEANING IS SOMETIMES CORRECT
+
+        LESSON 14 below says to prefer <strong> over <b>. Here the prototype
+        uses <b>, and that is right: these numbers are not "important" in the
+        way <strong> means. They are just big. <b> means "visually offset with
+        no extra importance", which is exactly this case.
+      -->
+      <div class="stats">
+
+        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
+             the next step: the array's length. 52 is carried over from the
+             prototype and is NOT a real count - replace or compute it before
+             this page is published anywhere. -->
+        <div class="stat"><b id="cnt">52</b><span>diplomas</span></div>
+
+        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
+             the next step: the number of distinct categories in it
+             (sport / study / clubs / projects). -->
+        <div class="stat"><b>4</b><span>categories</span></div>
+
+        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
+             the next step, once the projects section is data-driven too. -->
+        <div class="stat"><b>3</b><span>projects</span></div>
+
+      </div>
+    </section>
+
 
     <!-- ==================================================================
          SECTION: ABOUT ME
          This is where your personal statement material goes. Admissions
          officers read this first. Replace the placeholder text below.
+
+         The markup below is the prototype's section pattern, and every
+         section from here on repeats it:
+
+           <section class="sec wrap">   sec = top border + vertical padding
+             <div class="sec-head">     the heading row
+               <h2>...</h2>
+               <span class="count">     optional counter on the right
+             <p class="sec-note">       the grey intro line under the heading
          ================================================================== -->
-    <section id="about">
-      <h2>About me</h2>
+    <section class="sec wrap" id="about">
+      <div class="sec-head">
+        <h2>About me</h2>
+      </div>
 
       <!--
         LESSON 14 — BLOCK vs INLINE elements
@@ -336,14 +417,14 @@
         <p><div>text</div></p> is invalid HTML and browsers will silently
         rearrange your page to fix it.
       -->
-      <p>
+      <p class="sec-note">
         REPLACE THIS TEXT. Write two or three paragraphs about yourself: where you
         study, what subjects you love, what you want to study at university and why.
         Admissions officers are reading for motivation and consistency, not for a
         list of adjectives.
       </p>
 
-      <p>
+      <p class="sec-note">
         REPLACE THIS TEXT. A good second paragraph explains what connects your
         achievements. For example: how sport taught you discipline that you then
         applied to olympiad preparation, or how a project grew out of a problem you
@@ -357,7 +438,7 @@
         A screen reader changes its tone for <strong>/<em> and ignores <b>/<i>.
         So prefer <strong> and <em>.
       -->
-      <p>Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
+      <p class="sec-note">Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
     </section>
 
 

@@ -91,6 +91,28 @@
 
      spy() is also called once at the end, so the correct tab is highlighted on
      load rather than only after the first scroll.
+
+     LESSON 27 — THE LAST-SECTION PROBLEM
+
+     The rule above has a blind spot. You can only scroll until the BOTTOM of
+     the document reaches the bottom of the window - after that, scrolling stops.
+     If the final section starts less than one screen-height from the end of the
+     page, the imaginary line never reaches it, and its tab can never light up.
+
+     Measured on this page before the fix: #contact started at 1422px, but the
+     furthest you could scroll was 1035px, putting the line at 1155px. 267px
+     short, permanently.
+
+     The fix is a special case: if the page is scrolled to the bottom, the last
+     section is by definition the one you are looking at, so activate it and skip
+     the normal calculation.
+
+       scrollY + innerHeight     the position of the bottom edge of the window
+       documentElement.scrollHeight   the full height of the document
+
+     When those two are equal you are at the bottom. They are compared with a
+     2px tolerance because both can be fractional on high-DPI screens and on
+     zoomed pages, so an exact === would sometimes silently fail.
   -------------------------------------------------------------------------- */
   var links = [].slice.call(document.querySelectorAll('.tabs a, .drawer a'));
 
@@ -105,12 +127,19 @@
     .filter(Boolean);
 
   function spy() {
-    var line = window.scrollY + 120;
     var cur = null;
 
-    secs.forEach(function (s) {
-      if (s.offsetTop <= line) cur = s.id;
-    });
+    var atBottom = window.scrollY + window.innerHeight >=
+                   document.documentElement.scrollHeight - 2;
+
+    if (atBottom && secs.length) {
+      cur = secs[secs.length - 1].id;
+    } else {
+      var line = window.scrollY + 120;
+      secs.forEach(function (s) {
+        if (s.offsetTop <= line) cur = s.id;
+      });
+    }
 
     links.forEach(function (a) {
       a.classList.toggle('is-active', a.getAttribute('href') === '#' + cur);
