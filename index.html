@@ -183,72 +183,132 @@
 -->
 <body>
 
-  <header>
-    <!--
-      LESSON 10 — HEADING HIERARCHY (h1 to h6)
+  <!--
+    LESSON 10 — HEADING HIERARCHY (h1 to h6)
 
-      Headings are an OUTLINE, not a font-size picker. Three hard rules:
+    Headings are an OUTLINE, not a font-size picker. Three hard rules:
 
-        1. Exactly ONE <h1> per page. It is the title of the whole document.
-        2. Never skip a level. h1 then h3 with no h2 between them is an error.
-        3. Never choose a heading because of how big it looks. That is CSS's
-           job. Choose it because of what level of the outline it represents.
+      1. Exactly ONE <h1> per page. It is the title of the whole document.
+      2. Never skip a level. h1 then h3 with no h2 between them is an error.
+      3. Never choose a heading because of how big it looks. That is CSS's
+         job. Choose it because of what level of the outline it represents.
 
-      Our outline here is:
-        h1  Leskhan Uais              (the page)
-         h2  Sport                    (a section)
-          h3  Specific competition    (one achievement inside that section)
-    -->
-    <h1>Leskhan Uais</h1>
+    NOTE — the <h1> used to live here in the header. In the approved design it
+    moves into the "hero" block at the top of <main>, which is built in a later
+    step. Until then this page has NO h1, which is a real (temporary) defect:
+    a screen reader and Google both lose the document title. It comes back with
+    the hero.
+  -->
 
-    <p>Student · Athlete · Olympiad participant · Project builder</p>
+  <!--
+    LESSON 20 — THE STICKY HEADER, AND WHY THERE ARE TWO NAVIGATIONS
 
-    <!--
-      LESSON 11 — LINKS AND PATHS  *** SECOND BIGGEST EXAM TOPIC ***
+    Below are TWO sets of the same four links:
 
-      <a> means "anchor". The href attribute says where it goes.
-      There are three kinds of path, and knowing the difference is essential:
+      .tabs    a horizontal row, shown on wide screens
+      .drawer  a vertical panel, shown only when the burger is tapped
 
-        href="ru.html"              RELATIVE path - "a file next to me in the
-                                    same folder". Works on your computer AND on
-                                    the server without any change. Use this.
+    Duplicating links looks wasteful, but it is the standard responsive
+    pattern: CSS hides whichever one does not fit the current screen. Our
+    single breakpoint is 860px (see DESIGN.md). Above it: tabs visible, burger
+    hidden. Below it: tabs hidden, burger visible.
 
-        href="/ru.html"             ROOT-relative - "from the top of the site".
-                                    Works on a server, but breaks when you open
-                                    the file directly from your Desktop.
+    ARIA ATTRIBUTES on the burger button - these are exam material:
 
-        href="https://google.com"   ABSOLUTE path - a full address on another
-                                    site.
+      aria-expanded="false"   states whether the thing this button controls is
+                              currently open. JavaScript flips it to "true".
+                              A screen reader announces "collapsed"/"expanded".
+      aria-controls="drawer"  names the id of the element this button opens.
+      aria-label="Menu"       gives the button an accessible name. It contains
+                              only three decorative <span> bars, so without
+                              this a screen reader would just say "button".
 
-      Relative paths are the reason you can zip this folder, upload it anywhere,
-      and every link still works. Never hardcode C:\Users\... into href.
-    -->
-    <p><a href="ru.html">Русская версия</a></p>
+    Note that aria-expanded is not only for screen readers: style.css uses it
+    as a CSS selector to animate the three bars into an X.
+  -->
+  <header class="site-head">
+    <div class="head-in">
+
+      <!--
+        LESSON 11 — LINKS AND PATHS  *** SECOND BIGGEST EXAM TOPIC ***
+
+        <a> means "anchor". The href attribute says where it goes.
+        There are three kinds of path, and knowing the difference is essential:
+
+          href="ru.html"              RELATIVE path - "a file next to me in the
+                                      same folder". Works on your computer AND
+                                      on the server without any change.
+
+          href="/ru.html"             ROOT-relative - "from the top of the
+                                      site". Works on a server, but breaks when
+                                      you open the file directly from Desktop.
+
+          href="https://google.com"   ABSOLUTE path - a full address on another
+                                      site.
+
+        Relative paths are why you can zip this folder, upload it anywhere, and
+        every link still works. Never hardcode C:\Users\... into href.
+      -->
+      <a class="brand" href="#top">
+        <span class="mono-mark">LU</span>
+        <span>
+          <span class="brand-name">Leskhan Uais</span>
+          <span class="brand-sub">achievement archive</span>
+        </span>
+      </a>
+
+      <!--
+        LESSON 11b — IN-PAGE LINKS (fragment identifiers)
+
+        href="#about" does not load a new page. The # means "find the element
+        on THIS page whose id is about, and scroll to it".
+
+        Two rules about id:
+          - an id must be UNIQUE in the whole document (unlike class, which can
+            repeat as many times as you like)
+          - it is case-sensitive: #About will not find id="about"
+
+        These same ids are what app.js watches while you scroll, to decide
+        which tab to highlight.
+      -->
+      <nav class="tabs" id="tabs">
+        <a class="tab" href="#about">About me</a>
+        <a class="tab" href="#awards">Awards</a>
+        <a class="tab" href="#projects">Projects</a>
+        <a class="tab" href="#contact">Contact</a>
+      </nav>
+
+      <!--
+        The language switch. The prototype drew these as <button> elements, but
+        a button that navigates to another page is wrong: it should be a link,
+        so that middle-click, "open in new tab" and right-click all behave the
+        way a user expects. So these are <a> elements styled to look identical.
+        The .on class marks the language you are already reading.
+      -->
+      <div class="lang">
+        <a href="ru.html">RU</a>
+        <a class="on" href="index.html">EN</a>
+      </div>
+
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
   </header>
 
   <!--
-    LESSON 11b — IN-PAGE LINKS (fragment identifiers)
-
-    href="#sport" does not load a new page. The # means "find the element on
-    THIS page whose id is sport, and scroll to it".
-
-    Two rules about id:
-      - an id must be UNIQUE in the whole document (unlike class, which can
-        repeat as many times as you like)
-      - it is case-sensitive: #Sport will not find id="sport"
-
-    Later, when we add smooth scrolling animations between sections, these ids
-    are exactly what the CSS and JavaScript will hook onto.
+    The mobile drawer. It sits OUTSIDE <header> on purpose: the header is
+    position:sticky with a fixed height, and a panel that expands inside it
+    would be clipped. The drawer is position:fixed instead, anchored just below
+    the header.
   -->
-  <nav>
-    <ul>
-      <li><a href="#about">About me</a></li>
-      <li><a href="#sport">Sport</a></li>
-      <li><a href="#olympiads">Olympiads</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+  <div class="drawer" id="drawer">
+    <a href="#about">About me</a>
+    <a href="#awards">Awards</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
 
   <!-- <main> holds the unique content of this page. Only one per document. -->
   <main>
@@ -569,6 +629,33 @@
   <footer>
     <p>© 2026 Leskhan Uais</p>
   </footer>
+
+  <!--
+    LESSON 21 — WHERE TO PUT <script>, AND WHAT defer DOES
+
+    HTML is parsed top to bottom. A plain <script> in <head> STOPS the parser:
+    the browser downloads and runs the script before it continues building the
+    page. That delays everything the user can see, and worse, the script runs
+    before the elements it wants to touch exist - document.getElementById would
+    return null.
+
+    Three ways out, and the difference is a classic exam question:
+
+      <script>              blocks parsing, runs immediately
+      <script defer>        downloads in parallel, runs AFTER the HTML is fully
+                            parsed, and keeps multiple scripts in order
+      <script async>        downloads in parallel, runs the moment it arrives -
+                            order is not guaranteed
+
+    defer is what we want: app.js needs the burger, the drawer and the sections
+    to exist before it runs. With defer we get that guarantee AND the download
+    starts early.
+
+    The script tag is placed at the end of <body> as well - a habit from before
+    defer existed. With defer the position no longer matters, but keeping it
+    here makes the reading order obvious: content first, behaviour last.
+  -->
+  <script src="app.js" defer></script>
 
 </body>
 </html>

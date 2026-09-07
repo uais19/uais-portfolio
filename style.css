@@ -82,10 +82,16 @@
     margin-left:10px;display:flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;
     font-family:var(--mono);font-size:11px;
   }
-  .lang button{
+  /* The prototype used <button> here; the real pages use <a> so that the
+     language switch behaves like a link (middle-click, open in new tab).
+     Both selectors are listed so the prototype keeps rendering identically.
+     text-decoration:none is the only added declaration - links underline by
+     default, buttons do not. No new colours: same variables as before. */
+  .lang button,.lang a{
     background:none;border:0;color:var(--muted);padding:6px 10px;cursor:pointer;font:inherit;
+    text-decoration:none;
   }
-  .lang button.on{background:rgba(239,227,208,.14);color:var(--pill)}
+  .lang button.on,.lang a.on{background:rgba(239,227,208,.14);color:var(--pill)}
 
   .burger{
     display:none;margin-left:auto;

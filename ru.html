@@ -53,29 +53,53 @@
 </head>
 <body>
 
-  <header>
-    <h1>Лесхан Уаис</h1>
+  <!--
+    Шапка сайта. Структура ПОЛНОСТЬЮ совпадает с index.html — те же классы,
+    те же id, те же ссылки. Отличаются только подписи.
+    Подробные объяснения (ARIA-атрибуты, зачем две навигации, относительные
+    пути) — в index.html, УРОКИ 10, 11, 11b и 20.
 
-    <p>Ученик · Спортсмен · Участник олимпиад · Автор проектов</p>
+    ВНИМАНИЕ: <h1> временно исчез. В утверждённом дизайне он переезжает в блок
+    hero в начале <main>, который делается на следующем шаге.
+  -->
+  <header class="site-head">
+    <div class="head-in">
 
-    <!-- Ссылка обратно на английскую версию. Относительный путь. -->
-    <p><a href="index.html">English version</a></p>
+      <a class="brand" href="#top">
+        <span class="mono-mark">LU</span>
+        <span>
+          <span class="brand-name">Лесхан Уаис</span>
+          <span class="brand-sub">архив достижений</span>
+        </span>
+      </a>
+
+      <nav class="tabs" id="tabs">
+        <a class="tab" href="#about">Обо мне</a>
+        <a class="tab" href="#awards">Грамоты</a>
+        <a class="tab" href="#projects">Проекты</a>
+        <a class="tab" href="#contact">Контакты</a>
+      </nav>
+
+      <!-- Активный язык помечен классом .on. Ссылки указывают друг на друга. -->
+      <div class="lang">
+        <a class="on" href="ru.html">RU</a>
+        <a href="index.html">EN</a>
+      </div>
+
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
   </header>
 
-  <!--
-    ВАЖНО: значения id здесь такие же, как в index.html (#about, #sport и т.д.).
-    Это не случайность. Когда позже мы добавим CSS и анимации, один и тот же
-    файл стилей будет работать для обеих языковых версий без изменений.
-  -->
-  <nav>
-    <ul>
-      <li><a href="#about">Обо мне</a></li>
-      <li><a href="#sport">Спорт</a></li>
-      <li><a href="#olympiads">Олимпиады</a></li>
-      <li><a href="#projects">Проекты</a></li>
-      <li><a href="#contact">Контакты</a></li>
-    </ul>
-  </nav>
+  <!-- Выпадающее меню для телефонов. Лежит ВНЕ <header> — см. index.html. -->
+  <div class="drawer" id="drawer">
+    <a href="#about">Обо мне</a>
+    <a href="#awards">Грамоты</a>
+    <a href="#projects">Проекты</a>
+    <a href="#contact">Контакты</a>
+  </div>
 
   <main>
 
@@ -263,6 +287,12 @@
   <footer>
     <p>© 2026 Лесхан Уаис</p>
   </footer>
+
+  <!--
+    Тот же app.js, что и в английской версии — один файл на обе страницы.
+    Про атрибут defer (и чем он отличается от async) — index.html, УРОК 21.
+  -->
+  <script src="app.js" defer></script>
 
 </body>
 </html>
