@@ -148,4 +148,311 @@
 
   window.addEventListener('scroll', spy, { passive: true });
   spy();
+
+  /* ==========================================================================
+     4. THE AWARDS GRID
+
+     Everything below builds the #awards section from the ACHIEVEMENTS array in
+     data.js. No award markup exists in the HTML at all.
+     ====================================================================== */
+
+  /* --------------------------------------------------------------------------
+     LESSON 30 — TWO KINDS OF TEXT ON ONE PAGE
+
+     There is a language rule here that is worth stating clearly, because it
+     looks inconsistent until you know the reason:
+
+       UI text   (chip labels, "All years", "showing 3 of 14")
+                 follows the page. Russian on ru.html, English on index.html.
+
+       ENTRY text (an award's title, organiser, result, note)
+                 is ENGLISH ON BOTH PAGES.
+
+     Why the difference? Half the certificates are printed in Russian or Kazakh.
+     Translating them once, into data.js, means the wording is settled and can be
+     pasted straight into an application. Translating them twice - once per page
+     - would mean two versions of the same claim slowly drifting apart, and this
+     archive has to survive the question "show me the document".
+
+     data.js keeps the original printed wording in an "orig" field for exactly
+     that reason. It is not rendered on the card; it belongs in the lightbox,
+     next to the scan.
+
+     So: UI strings are looked up by language below. Entry fields are not.
+  -------------------------------------------------------------------------- */
+  var LANG = document.documentElement.lang === 'ru' ? 'ru' : 'en';
+
+  var UI = {
+    ru: {
+      all: 'Все',
+      allYears: 'Все годы',
+      noYear: 'год уточняется',
+      cats: { study: 'Учёба', sport: 'Спорт', creative: 'Творчество', projects: 'Проекты' },
+      shown: function (n, total) { return 'показано ' + n + ' из ' + total; },
+      empty: 'В этом срезе пока пусто — попробуйте другой год или категорию.',
+      noYearShort: '—'
+    },
+    en: {
+      all: 'All',
+      allYears: 'All years',
+      noYear: 'year to confirm',
+      cats: { study: 'Studies', sport: 'Sport', creative: 'Arts', projects: 'Projects' },
+      shown: function (n, total) { return 'showing ' + n + ' of ' + total; },
+      empty: 'Nothing in this slice yet — try another year or category.',
+      noYearShort: '—'
+    }
+  }[LANG];
+
+  /* The four categories, in the order the chips should appear. Fixed on
+     purpose: reading them off the data would let the order change whenever an
+     entry is added or removed. */
+  var CAT_ORDER = ['study', 'sport', 'creative', 'projects'];
+
+  var grid = document.getElementById('grid');
+  var filters = document.getElementById('filters');
+  var shownEl = document.getElementById('shown');
+
+  /* If data.js failed to load, ACHIEVEMENTS is undefined. Bail out quietly
+     rather than throwing and taking the burger and the scrollspy down with it -
+     one broken feature is better than a dead page. */
+  if (grid && filters && typeof ACHIEVEMENTS !== 'undefined') {
+    initAwards(ACHIEVEMENTS);
+  }
+
+  function initAwards(items) {
+
+    /* ---- hero counters -------------------------------------------------
+       Computed, not hardcoded. distinctCats counts how many of the four
+       categories actually appear in the data, so removing every entry of one
+       category correctly drops this to 3. */
+    var distinctCats = items
+      .map(function (i) { return i.cat; })
+      .filter(function (v, idx, arr) { return arr.indexOf(v) === idx; })
+      .length;
+
+    setText(document.getElementById('cnt'), items.length);
+    setText(document.getElementById('catCount'), distinctCats);
+
+    /* ---- state ---------------------------------------------------------
+       The two filters are just two variables. Every change writes here and
+       then calls render(), which rebuilds the grid from scratch. Rebuilding
+       everything is wasteful in theory and completely fine at 14 entries; it
+       is also far easier to reason about than patching the DOM in place. */
+    var state = { cat: 'all', year: 'all' };
+
+    /* ---- chips ---------------------------------------------------------
+       One chip per category plus "All", each showing how many entries it
+       holds. Counts come from the data, so they can never disagree with the
+       grid. */
+    var counts = { all: items.length };
+    items.forEach(function (i) { counts[i.cat] = (counts[i.cat] || 0) + 1; });
+
+    function chip(key, label) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (key === state.cat ? ' on' : '');
+      b.type = 'button';
+      b.dataset.cat = key;
+      b.textContent = label;
+
+      var n = document.createElement('span');
+      n.className = 'n';
+      n.textContent = counts[key] || 0;
+      b.appendChild(n);
+
+      b.addEventListener('click', function () {
+        state.cat = key;
+        filters.querySelectorAll('.chip').forEach(function (c) {
+          c.classList.toggle('on', c.dataset.cat === key);
+        });
+        render();
+      });
+      return b;
+    }
+
+    filters.appendChild(chip('all', UI.all));
+    CAT_ORDER.forEach(function (k) { filters.appendChild(chip(k, UI.cats[k])); });
+
+    /* ---- year select ---------------------------------------------------
+       LESSON 31 — null IS A VALUE, NOT AN ABSENCE
+
+       12 of the 14 entries have y: null, because the year is not confirmed yet.
+       The naive version of this select does:
+
+         items.map(i => i.y).filter(unique).sort()
+
+       and produces an option literally labelled "null", which then sorts
+       somewhere random because null compared with a number is neither greater
+       nor smaller.
+
+       Worse, filtering with String(i.y) === selectedValue would make those 12
+       entries reachable ONLY through that broken option - and if you dropped
+       null instead, 12 of 14 entries would silently vanish from the archive.
+
+       So null is handled as its own case:
+         - real years are collected, deduplicated and sorted newest first
+         - if any entry has no year, one extra option is added at the END,
+           with the value 'none' and a readable label
+         - 'all' still means all, nulls included
+    */
+    var years = items
+      .map(function (i) { return i.y; })
+      .filter(function (y) { return y !== null && y !== undefined; })
+      .filter(function (v, idx, arr) { return arr.indexOf(v) === idx; })
+      .sort(function (a, b) { return b - a; });
+
+    var hasUndated = items.some(function (i) { return i.y === null || i.y === undefined; });
+
+    var sel = document.createElement('select');
+    sel.className = 'year-sel';
+    sel.appendChild(option('all', UI.allYears));
+    years.forEach(function (y) { sel.appendChild(option(String(y), String(y))); });
+    if (hasUndated) sel.appendChild(option('none', UI.noYear));
+
+    sel.addEventListener('change', function () {
+      state.year = sel.value;
+      render();
+    });
+    filters.appendChild(sel);
+
+    function option(value, label) {
+      var o = document.createElement('option');
+      o.value = value;
+      o.textContent = label;
+      return o;
+    }
+
+    /* ---- filtering ------------------------------------------------------ */
+    function matches(i) {
+      var catOk = state.cat === 'all' || i.cat === state.cat;
+
+      var yearOk;
+      if (state.year === 'all') {
+        yearOk = true;
+      } else if (state.year === 'none') {
+        yearOk = (i.y === null || i.y === undefined);
+      } else {
+        yearOk = String(i.y) === state.year;
+      }
+
+      return catOk && yearOk;
+    }
+
+    /* ---- one card -------------------------------------------------------
+       LESSON 32 — WHY THIS BUILDS NODES INSTEAD OF PASTING HTML STRINGS
+
+       The prototype built each card with innerHTML and string concatenation.
+       That is shorter, and it has a real bug waiting in it: the moment a title
+       contains a < or an & - or an apostrophe in the wrong place - the browser
+       parses it as markup and the card breaks. With text from an outside source
+       it is worse than a broken card: text containing a <script> tag would RUN.
+       That vulnerability is called XSS, cross-site scripting.
+
+       createElement + textContent cannot have that problem, because textContent
+       never parses anything as HTML. The output markup is identical.
+
+       This card is an <article>, not a <button> as in the prototype. Nothing
+       happens when you click it yet; a button that does nothing is a promise
+       the page does not keep. It becomes interactive in the lightbox step.
+    */
+    function renderCard(item) {
+      var card = document.createElement('article');
+      card.className = 'card';
+
+      /* -- thumbnail -- */
+      var thumb = document.createElement('div');
+      thumb.className = 'thumb';
+
+      var tag = document.createElement('span');
+      tag.className = 'thumb-tag';
+      tag.textContent = UI.cats[item.cat] || item.cat;
+      thumb.appendChild(tag);
+
+      /* res may be null - then no badge at all, rather than an empty orange
+         rectangle sitting in the corner of the card. */
+      if (item.res) {
+        var place = document.createElement('span');
+        place.className = 'place';
+        place.textContent = item.res;
+        thumb.appendChild(place);
+      }
+
+      if (item.img) {
+        /* A real scan. .has-img switches off the CSS paper drawing in
+           style.css; the 4/3 aspect-ratio on .thumb is what keeps this card
+           exactly as tall as a placeholder one. */
+        thumb.classList.add('has-img');
+        var img = document.createElement('img');
+        img.src = item.img;
+        img.alt = item.t;          /* the title describes the scan */
+        img.loading = 'lazy';
+        thumb.appendChild(img);
+      } else {
+        /* No scan yet: the prototype's CSS "paper" placeholder. The <i> draws
+           the three ruled lines; the seal and the border come from ::before
+           and ::after in style.css. */
+        thumb.appendChild(document.createElement('i'));
+      }
+
+      card.appendChild(thumb);
+
+      /* -- body -- */
+      var body = document.createElement('div');
+      body.className = 'card-body';
+
+      var h3 = document.createElement('h3');
+      h3.textContent = item.t;
+      body.appendChild(h3);
+
+      var meta = document.createElement('div');
+      meta.className = 'card-meta';
+
+      var yr = document.createElement('span');
+      yr.className = 'yr';
+      yr.textContent = (item.y === null || item.y === undefined) ? UI.noYearShort : item.y;
+      meta.appendChild(yr);
+
+      /* org is null on 12 of the 14 entries. Skip the span entirely rather
+         than rendering an empty one, which would still add a gap. */
+      if (item.org) {
+        var org = document.createElement('span');
+        org.textContent = item.org;
+        meta.appendChild(org);
+      }
+
+      body.appendChild(meta);
+      card.appendChild(body);
+
+      /* status and orig are deliberately NOT rendered here. status gets its
+         badge and filter in the next step; orig belongs in the lightbox, next
+         to the scan it verifies. */
+
+      return card;
+    }
+
+    /* ---- the grid ------------------------------------------------------- */
+    function render() {
+      var list = items.filter(matches);
+
+      grid.textContent = '';   /* clear; faster and safer than innerHTML = '' */
+
+      if (!list.length) {
+        var e = document.createElement('div');
+        e.className = 'empty';
+        e.textContent = UI.empty;
+        grid.appendChild(e);
+      } else {
+        list.forEach(function (item) { grid.appendChild(renderCard(item)); });
+      }
+
+      setText(shownEl, UI.shown(list.length, items.length));
+    }
+
+    render();
+  }
+
+  /* Small helper: write text into an element only if the element exists, so a
+     missing id in one of the two HTML files cannot throw. */
+  function setText(el, value) {
+    if (el) el.textContent = value;
+  }
 })();

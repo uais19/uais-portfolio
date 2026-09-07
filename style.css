@@ -204,6 +204,14 @@
   }
   .thumb i::before{top:11px;width:78%}
   .thumb i::after{top:22px;width:54%}
+  /* Real scan instead of the paper placeholder. Added for this project - the
+     prototype only ever drew the placeholder, so it had no image case.
+     .thumb keeps its aspect-ratio:4/3, which is what guarantees a card with a
+     scan is exactly as tall as a card without one. No new colours. */
+  .thumb.has-img{background:none}
+  .thumb.has-img::before,.thumb.has-img::after{content:none}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+
   .thumb-tag{
     position:absolute;top:10px;left:10px;z-index:2;
     font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;

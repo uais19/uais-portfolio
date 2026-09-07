@@ -364,19 +364,21 @@
       -->
       <div class="stats">
 
-        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
-             the next step: the array's length. 52 is carried over from the
-             prototype and is NOT a real count - replace or compute it before
-             this page is published anywhere. -->
-        <div class="stat"><b id="cnt">52</b><span>diplomas</span></div>
+        <!-- COMPUTED by app.js: ACHIEVEMENTS.length. The "0" here is only what
+             shows if JavaScript fails - a wrong number is worse than none, so
+             the fallback is deliberately zero rather than a guess. -->
+        <div class="stat"><b id="cnt">0</b><span>diplomas</span></div>
 
-        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
-             the next step: the number of distinct categories in it
-             (sport / study / clubs / projects). -->
-        <div class="stat"><b>4</b><span>categories</span></div>
+        <!-- COMPUTED by app.js: the number of DISTINCT cat values actually
+             present in ACHIEVEMENTS. Not hardcoded to 4 - if every entry of a
+             category were removed, this would correctly drop to 3. -->
+        <div class="stat"><b id="catCount">0</b><span>categories</span></div>
 
-        <!-- PLACEHOLDER NUMBER. Will be computed from the awards data array in
-             the next step, once the projects section is data-driven too. -->
+        <!-- STILL HARDCODED. This one counts the entries in the #projects
+             section below, which is not data-driven yet. It is not the number
+             of 'projects' category entries in ACHIEVEMENTS - those are awards
+             for projects, which is a different thing. Becomes computed when the
+             projects section is rebuilt. -->
         <div class="stat"><b>3</b><span>projects</span></div>
 
       </div>
@@ -441,177 +443,109 @@
       <p class="sec-note">Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
     </section>
 
-
     <!-- ==================================================================
-         SECTION: SPORT
+         SECTION: AWARDS
+
+         LESSON 28 — DATA-DRIVEN HTML  *** the big idea of this step ***
+
+         Look at how little markup is here. Two empty containers:
+
+           <div class="filters" id="filters"></div>
+           <div class="grid" id="grid"></div>
+
+         Every chip and every card is BUILT BY JAVASCRIPT at page load, from the
+         ACHIEVEMENTS array in data.js.
+
+         Why this is worth the trouble:
+
+           Before, one award = one <article> block copied by hand into TWO
+           language files. Fourteen awards = 28 blocks to keep in sync, and one
+           typo in one of them and the pages disagree.
+
+           Now, one award = one object in data.js. index.html and ru.html read
+           the SAME array. Adding an award is one line, in one file, and both
+           pages, all the counters and all the filters update themselves.
+
+         A DELIBERATE DECISION ABOUT LANGUAGE
+
+         The entry text itself - title, organiser, result, note - is English on
+         BOTH pages. Half the certificates are written in Russian or Kazakh, and
+         the translation is done once, here in the archive, rather than being
+         redone for every application. data.js keeps the original wording in an
+         "orig" field so the translation can be checked against the paper later.
+
+         Only the SHELL of ru.html is Russian: navigation, section headings, the
+         About text, and the filter labels. So there is no per-language lookup
+         for card content - t, org, res and note are rendered exactly as stored.
+
+         This is the same principle behind React, Vue and every other modern
+         framework: keep the DATA separate from the TEMPLATE that displays it,
+         and never store the same fact twice. The technical name for that last
+         rule is a "single source of truth".
+
+         The elements below are empty on purpose. If JavaScript fails to load,
+         this section is blank - which is the real trade-off you accept when you
+         generate content on the client instead of writing it into the HTML.
+
+         ------------------------------------------------------------------
+         LESSON 17 — THE <img> TAG  (moved here from the old Sport section,
+         because the card images are now built in app.js)
+
+           src   = path to the file, relative: "images/sport-judo-2025.jpg"
+           alt   = what the image SHOWS, as a sentence. Read aloud by screen
+                   readers, displayed if the file is missing, used by Google.
+                   app.js passes the award's title as the alt text.
+           loading="lazy"
+                 = do not download until the user scrolls near it. With a grid
+                   of scans this is the difference between a fast page and a
+                   slow one.
+
+         Every entry in data.js currently has img: null, so right now every card
+         draws the CSS "paper" placeholder instead - see renderCard() in app.js.
+
+         ------------------------------------------------------------------
+         LESSON 15 — <time> (moved here from the old Sport section)
+
+         Humans read "14 March 2025". Computers cannot: is 03/04/2025 the 3rd of
+         April or the 4th of March? It depends on the country. The <time> element
+         carries both, with datetime="2025-03-14" in unambiguous ISO 8601 form.
+
+         The cards show only a year, so app.js writes plain text rather than a
+         <time> element. When a full date is added to data.js, this is the tag
+         to reach for.
+
+         ------------------------------------------------------------------
+         LESSON 16 — <figure> and <figcaption> (moved here from the old Sport
+         section) group an image with its caption so the two are ONE unit, and
+         the relationship is machine-readable rather than just visual. The award
+         cards use a plain <div> wrapper instead, because the whole card is
+         already the unit and it will become one clickable thing in the lightbox
+         step.
          ================================================================== -->
-    <section id="sport">
-      <h2>Sport</h2>
+    <section class="sec wrap" id="awards">
 
-      <p>Competitions, tournaments and sport achievements.</p>
+      <div class="sec-head">
+        <h2>Awards</h2>
+        <!-- Filled in by app.js: "showing 14 of 14". Empty here so that a
+             stale number can never be shown if the script fails. -->
+        <span class="count" id="shown"></span>
+      </div>
 
-      <!--
-        vvv  COPY EVERYTHING BETWEEN THESE MARKERS TO ADD A NEW ACHIEVEMENT  vvv
+      <p class="sec-note">
+        Every entry below is a real record. Scans are still being collected, so
+        cards without an image show a placeholder, and entries whose year is not
+        yet confirmed are grouped under "year to confirm".
+      </p>
 
-        LESSON 9b — why <article> and not <div>?
+      <!-- Built by app.js: one chip per category plus "All", then the year
+           select. The .filters bar is position:sticky, so it stays under the
+           header while you scroll the grid. -->
+      <div class="filters" id="filters"></div>
 
-        <article> means "a self-contained piece of content that would still make
-        sense if you cut it out and pasted it somewhere else". One diploma is
-        exactly that. A news story, a blog post, a product card, a comment - all
-        <article>.
-
-        class="achievement" is a HOOK. Unlike id, a class can repeat on many
-        elements. When we add animations later, one CSS rule targeting
-        .achievement will animate every single achievement on the site at once.
-        Adding it now costs nothing and saves rewriting the markup later.
-      -->
-      <article class="achievement">
-
-        <h3>EXAMPLE — City Judo Championship, 2nd place</h3>
-
-        <!--
-          LESSON 15 — <time> and the datetime attribute
-
-          Humans read "14 March 2025". Computers cannot parse that reliably -
-          is 03/04/2025 the 3rd of April or the 4th of March? It depends on the
-          country. So <time> carries BOTH:
-
-            datetime="2025-03-14"   the machine-readable ISO 8601 form,
-                                    always YYYY-MM-DD, never ambiguous
-            14 March 2025           the human-readable form
-
-          Search engines use this to show dates correctly in results.
-        -->
-        <p>
-          <time datetime="2025-03-14">14 March 2025</time> ·
-          Almaty ·
-          City Sport Department
-        </p>
-
-        <p>
-          REPLACE THIS. One or two sentences: what the competition was, how many
-          participants, what you personally did. Concrete numbers are far more
-          convincing than adjectives — "2nd of 48 participants" beats "did very well".
-        </p>
-
-        <!--
-          LESSON 16 — <figure> and <figcaption>
-
-          <figure> groups an image with its caption so that they are treated as
-          ONE unit. If you just write <img> followed by <p>Some caption</p>,
-          nothing in the HTML says those two things belong together.
-          <figcaption> makes the relationship explicit and machine-readable.
-        -->
-        <figure>
-
-          <!--
-            ============================================================
-            LESSON 17 — THE <img> TAG  *** EXAM FAVOURITE ***
-            ============================================================
-
-            src   = the path to the image file. Relative, just like href.
-                    "images/sport-judo-2025.jpg" means "go into the images
-                    folder that sits next to this HTML file, take that file".
-
-            alt   = alternative text. This is NOT optional and NOT a tooltip.
-                    It is the text that:
-                      - a blind user's screen reader reads out loud
-                      - appears on screen if the image fails to load
-                      - search engines use to understand the picture
-                    Write what the image SHOWS, as a sentence. Not "diploma.jpg",
-                    not "photo". Try it: break the src path on purpose, reload,
-                    and watch your alt text appear in place of the image.
-
-            width / height
-                  = the image's real pixel size. The browser reserves exactly
-                    that much space BEFORE the image finishes downloading, so
-                    the page does not jump around while loading. This annoying
-                    jump has a name you may be tested on: Cumulative Layout
-                    Shift (CLS).
-
-            loading="lazy"
-                  = do not download this image until the user scrolls near it.
-                    On a page with 20 diplomas this is the difference between
-                    loading in 1 second and loading in 15.
-
-            HOW TO ADD YOUR OWN IMAGE:
-              1. Put the file into the "images" folder next to this file.
-              2. Name it in lowercase Latin with hyphens, no spaces and no
-                 Cyrillic: sport-judo-2025.jpg
-                 (the filename becomes part of the public web address, and
-                 spaces turn into ugly %20 while Cyrillic turns into %D0%94)
-              3. Change src below to match that filename exactly, including
-                 the extension. Web servers are case-sensitive: Photo.JPG and
-                 photo.jpg are two different files on Linux, even though
-                 Windows treats them as the same. This bug bites everyone once.
-              4. Update alt, width and height to match the real image.
-          -->
-          <img src="images/example-replace-me.jpg"
-               alt="Diploma for 2nd place at the City Judo Championship, 2025"
-               width="800"
-               height="1100"
-               loading="lazy">
-
-          <figcaption>Diploma — City Judo Championship, 2025</figcaption>
-        </figure>
-
-      </article>
-      <!-- ^^^  END OF ONE ACHIEVEMENT BLOCK  ^^^ -->
-
-      <article class="achievement">
-        <h3>EXAMPLE — Regional Athletics Tournament, participant</h3>
-        <p>
-          <time datetime="2024-10-05">5 October 2024</time> ·
-          Almaty Region ·
-          Regional Sport Federation
-        </p>
-        <p>REPLACE THIS with a short description of the event and your result.</p>
-        <figure>
-          <img src="images/example-replace-me-2.jpg"
-               alt="Certificate of participation in the Regional Athletics Tournament, 2024"
-               width="1100"
-               height="800"
-               loading="lazy">
-          <figcaption>Certificate of participation — Regional Athletics Tournament, 2024</figcaption>
-        </figure>
-      </article>
+      <!-- Built by app.js: one <article class="card"> per matching entry. -->
+      <div class="grid" id="grid"></div>
 
     </section>
-
-
-    <!-- ==================================================================
-         SECTION: OLYMPIADS
-         ================================================================== -->
-    <section id="olympiads">
-      <h2>Olympiads</h2>
-
-      <p>Academic olympiads and subject competitions.</p>
-
-      <article class="achievement">
-        <h3>EXAMPLE — Republican Informatics Olympiad, 1st place</h3>
-        <p>
-          <time datetime="2025-02-20">20 February 2025</time> ·
-          Astana ·
-          Ministry of Education
-        </p>
-        <p>
-          REPLACE THIS. For olympiads, say which round it was (school, city,
-          regional, republican, international), the subject, and your placement
-          out of how many competitors.
-        </p>
-        <figure>
-          <img src="images/example-replace-me-3.jpg"
-               alt="Diploma for 1st place at the Republican Informatics Olympiad, 2025"
-               width="800"
-               height="1100"
-               loading="lazy">
-          <figcaption>Diploma — Republican Informatics Olympiad, 2025</figcaption>
-        </figure>
-      </article>
-
-    </section>
-
-
     <!-- ==================================================================
          SECTION: PROJECTS
          ================================================================== -->
@@ -652,14 +586,6 @@
           </a>
         </p>
 
-        <figure>
-          <img src="images/example-replace-me-4.jpg"
-               alt="Winner's diploma from the School Science Fair, 2025"
-               width="800"
-               height="1100"
-               loading="lazy">
-          <figcaption>Diploma — School Science Fair, 2025</figcaption>
-        </figure>
       </article>
 
     </section>
@@ -736,6 +662,23 @@
     defer existed. With defer the position no longer matters, but keeping it
     here makes the reading order obvious: content first, behaviour last.
   -->
+  <!--
+    LESSON 29 — SCRIPT ORDER, AND WHY defer IS ON BOTH
+
+    data.js defines the ACHIEVEMENTS array. app.js reads it. So data.js must
+    run FIRST, and this is exactly the guarantee defer gives you:
+
+      "deferred scripts run after the HTML is parsed, IN THE ORDER THEY APPEAR"
+
+    That ordering promise is the difference between defer and async. With async
+    the two files would race - whichever downloaded faster would run first, and
+    roughly half the time app.js would run before ACHIEVEMENTS existed and throw
+    a ReferenceError. Swap defer for async here and you can watch it happen.
+
+    Both tags need defer. A plain <script src="data.js"> would run immediately
+    and block parsing, defeating the point.
+  -->
+  <script src="data.js" defer></script>
   <script src="app.js" defer></script>
 
 </body>
