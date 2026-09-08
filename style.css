@@ -162,7 +162,10 @@
     transition:border-color .18s ease,color .18s ease,background .18s ease;
   }
   .chip:hover{color:var(--text);border-color:var(--muted)}
-  .chip.on{background:var(--pill);border-color:var(--pill);color:#2A1F18;font-weight:600}
+  /* .on marks the active category chip. [aria-pressed="true"] marks the
+     "verified only" toggle, which is a different kind of control (its own
+     on/off state, not one choice among several) but must look identical. */
+  .chip.on,.chip[aria-pressed="true"]{background:var(--pill);border-color:var(--pill);color:#2A1F18;font-weight:600}
   .chip .n{font-family:var(--mono);font-size:11px;opacity:.72;margin-left:6px}
   .year-sel{
     margin-left:auto;background:var(--surface);color:var(--text);border:1px solid var(--line-strong);
@@ -229,6 +232,17 @@
     display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px;
   }
   .card-meta .yr{color:var(--accent)}
+
+  /* Status flag: "approximate" / "to confirm". Sits in the meta row, so it
+     already inherits the mono face, 11px and --muted from .card-meta. Restated
+     explicitly so it survives if .card-meta is ever restyled. No new colour. */
+  .card-meta .flag{font-family:var(--mono);color:var(--muted)}
+
+  /* status:'check' - the record still needs its document. Dashed instead of
+     solid, using the existing --line-strong so the outline stays visible at a
+     glance while scrolling. border-style only; the radius, width and hover
+     behaviour of .card are untouched. */
+  .card.is-check{border-style:dashed;border-color:var(--line-strong)}
 
   .empty{
     border:1px dashed var(--line-strong);border-radius:14px;padding:34px;text-align:center;color:var(--muted);

@@ -190,7 +190,10 @@
       cats: { study: 'Учёба', sport: 'Спорт', creative: 'Творчество', projects: 'Проекты' },
       shown: function (n, total) { return 'показано ' + n + ' из ' + total; },
       empty: 'В этом срезе пока пусто — попробуйте другой год или категорию.',
-      noYearShort: '—'
+      noYearShort: '—',
+      verifiedOnly: 'Только подтверждённые',
+      statusApprox: 'приблизительно',
+      statusCheck: 'нужно подтвердить'
     },
     en: {
       all: 'All',
@@ -199,7 +202,10 @@
       cats: { study: 'Studies', sport: 'Sport', creative: 'Arts', projects: 'Projects' },
       shown: function (n, total) { return 'showing ' + n + ' of ' + total; },
       empty: 'Nothing in this slice yet — try another year or category.',
-      noYearShort: '—'
+      noYearShort: '—',
+      verifiedOnly: 'Verified only',
+      statusApprox: 'approximate',
+      statusCheck: 'to confirm'
     }
   }[LANG];
 
@@ -234,11 +240,15 @@
     setText(document.getElementById('catCount'), distinctCats);
 
     /* ---- state ---------------------------------------------------------
-       The two filters are just two variables. Every change writes here and
+       The three filters are just three variables. Every change writes here and
        then calls render(), which rebuilds the grid from scratch. Rebuilding
        everything is wasteful in theory and completely fine at 14 entries; it
-       is also far easier to reason about than patching the DOM in place. */
-    var state = { cat: 'all', year: 'all' };
+       is also far easier to reason about than patching the DOM in place.
+
+       Keeping all three in ONE object is what makes them combine instead of
+       overriding each other: matches() reads all three every time, so no
+       filter has to know that the others exist. */
+    var state = { cat: 'all', year: 'all', verifiedOnly: false };
 
     /* ---- chips ---------------------------------------------------------
        One chip per category plus "All", each showing how many entries it
@@ -261,7 +271,11 @@
 
       b.addEventListener('click', function () {
         state.cat = key;
-        filters.querySelectorAll('.chip').forEach(function (c) {
+        /* Scoped to [data-cat] on purpose. The "verified only" toggle below is
+           also a .chip, and a bare '.chip' selector here would strip its active
+           styling on every category click while state.verifiedOnly stayed true
+           - the button would lie about what the grid is showing. */
+        filters.querySelectorAll('.chip[data-cat]').forEach(function (c) {
           c.classList.toggle('on', c.dataset.cat === key);
         });
         render();
@@ -271,6 +285,38 @@
 
     filters.appendChild(chip('all', UI.all));
     CAT_ORDER.forEach(function (k) { filters.appendChild(chip(k, UI.cats[k])); });
+
+    /* ---- "verified only" toggle ----------------------------------------
+       LESSON 33 — aria-pressed, AND WHAT MAKES A BUTTON A TOGGLE
+
+       This looks like the chips next to it, but it is a different kind of
+       control. A chip is one choice out of several - press another and this one
+       lets go. This button has its own independent on/off state.
+
+       aria-pressed is how you say that in HTML. A screen reader announces
+       "Verified only, toggle button, pressed" or "not pressed". Without it, a
+       blind user hears only "Verified only, button" and has no way to know
+       whether the filter is currently on.
+
+       Compare with aria-expanded on the burger (LESSON 20): expanded describes
+       something ELSE that this button opens; pressed describes THIS button's
+       own state. Using the wrong one is a common mistake.
+
+       Note it carries no data-cat attribute. That is what keeps the category
+       chip handler above from touching it, and it is why the CSS matches it on
+       [aria-pressed="true"] rather than on the .on class the chips use.
+    */
+    var verifyBtn = document.createElement('button');
+    verifyBtn.className = 'chip';
+    verifyBtn.type = 'button';
+    verifyBtn.textContent = UI.verifiedOnly;
+    verifyBtn.setAttribute('aria-pressed', 'false');
+    verifyBtn.addEventListener('click', function () {
+      state.verifiedOnly = !state.verifiedOnly;
+      verifyBtn.setAttribute('aria-pressed', state.verifiedOnly ? 'true' : 'false');
+      render();
+    });
+    filters.appendChild(verifyBtn);
 
     /* ---- year select ---------------------------------------------------
        LESSON 31 — null IS A VALUE, NOT AN ABSENCE
@@ -334,7 +380,12 @@
         yearOk = String(i.y) === state.year;
       }
 
-      return catOk && yearOk;
+      var statusOk = !state.verifiedOnly || i.status === 'confirmed';
+
+      /* All three joined with AND, so they narrow the result together rather
+         than one winning. "Sport" + "year to confirm" + "verified only" asks
+         for entries that are all three at once. */
+      return catOk && yearOk && statusOk;
     }
 
     /* ---- one card -------------------------------------------------------
@@ -419,12 +470,43 @@
         meta.appendChild(org);
       }
 
+      /* -- status --------------------------------------------------------
+         LESSON 34 — THE DEFAULT STATE GETS NO BADGE
+
+         Three statuses, but only two of them draw anything:
+
+           confirmed  nothing at all
+           approx     a quiet label, "approximate"
+           check      the same label, "to confirm", plus a dashed card border
+
+         'confirmed' is silent on purpose. It is what every entry should
+         eventually be, and a badge repeated on fifty cards stops being
+         information and becomes wallpaper - the eye filters it out, and then it
+         fails to register on the cards where it matters. Marking the exception
+         rather than the rule is a general interface principle worth keeping.
+
+         The dashed border is a SECOND channel for 'check', not a decoration.
+         It is readable at a glance while scrolling, before you have read any
+         label - which is what you want from "this one still needs a document".
+
+         The label goes in the meta row, with the year and organiser, because
+         that is what it is: a fact about the record. Putting it on the
+         thumbnail would make it look like part of the certificate, and putting
+         it in the title would make it part of the award's name. */
+      if (item.status === 'approx' || item.status === 'check') {
+        var flag = document.createElement('span');
+        flag.className = 'flag';
+        flag.textContent = item.status === 'approx' ? UI.statusApprox : UI.statusCheck;
+        meta.appendChild(flag);
+      }
+
+      if (item.status === 'check') card.classList.add('is-check');
+
       body.appendChild(meta);
       card.appendChild(body);
 
-      /* status and orig are deliberately NOT rendered here. status gets its
-         badge and filter in the next step; orig belongs in the lightbox, next
-         to the scan it verifies. */
+      /* orig is still NOT rendered here - it belongs in the lightbox, next to
+         the scan it lets you verify. */
 
       return card;
     }
