@@ -30,7 +30,10 @@
               'confirmed' — есть грамота/диплом на руках
               'approx'    — было, но цифры или детали по памяти
               'check'     — нужно найти документ и уточнить формулировку
-   img      путь к скану: 'images/имя-файла.jpg'. null, пока скана нет.
+   img      ИМЯ ФАЙЛА скана, без папки: 'sasmo-silver-award-2025.jpg'.
+            Папку дописывает app.js: 'images/thumbs/<img>' для карточки,
+            'images/full/<img>' для лайтбокса. Оба файла делает скрипт
+            `cd tools && npm run images` из фотографии в _raw/. null — скана нет.
    note     одно-два предложения по-английски. Что за событие, сколько
             участников, что сделал лично. null — если пока нечего сказать.
 
@@ -64,44 +67,44 @@ const ACHIEVEMENTS = [
   },
   {
     cat: 'study',
-    t: 'Mathematics olympiad — 2nd place',
+    t: 'SASMO — Silver Award',
     orig: null,
-    org: null,
-    y: null,
-    res: '2nd place',
-    status: 'check',
-    img: null,
-    note: 'Which olympiad this was (SASMO / AMO / Nurorda), the year and the field size still need to be filled in from the certificate.'
+    org: 'SASMO · Nazarbayev Intellectual School of Physics and Mathematics, Astana',
+    y: 2025,
+    res: 'Silver Award',
+    status: 'confirmed',
+    img: 'sasmo-silver-award-2025.jpg',
+    note: 'Singapore & Asian Schools Math Olympiad 2025. Silver Award for outstanding achievement, sat through Nazarbayev Intellectual School of Physics and Mathematics in Astana. Certificate no. A0483166.'
   },
   {
     cat: 'study',
-    t: 'Mathematics olympiad — 3rd place',
+    t: 'Mathematics olympiad — Bronze Award',
     orig: null,
     org: null,
     y: null,
-    res: '3rd place',
+    res: 'Bronze Award',
     status: 'check',
     img: null,
-    note: 'One of three bronze results. Olympiad and year to be confirmed from the certificate.'
+    note: 'One of three bronze results. Which olympiad (SASMO / AMO / Nurorda) and which year — to be filled in from the certificate.'
   },
   {
     cat: 'study',
-    t: 'Mathematics olympiad — 3rd place',
+    t: 'Mathematics olympiad — Bronze Award',
     orig: null,
     org: null,
     y: null,
-    res: '3rd place',
+    res: 'Bronze Award',
     status: 'check',
     img: null,
     note: 'Second of three bronze results.'
   },
   {
     cat: 'study',
-    t: 'Mathematics olympiad — 3rd place',
+    t: 'Mathematics olympiad — Bronze Award',
     orig: null,
     org: null,
     y: null,
-    res: '3rd place',
+    res: 'Bronze Award',
     status: 'check',
     img: null,
     note: 'Third of three bronze results.'
@@ -166,17 +169,6 @@ const ACHIEVEMENTS = [
     status: 'approx',
     img: null,
     note: 'Three years of dombra and 5–6 concerts on school and city stages, including one large ensemble performance in a theatre. Some concerts came with certificates; each should become its own entry once collected.'
-  },
-  {
-    cat: 'creative',
-    t: 'Acting classes — certificates',
-    orig: null,
-    org: null,
-    y: null,
-    res: null,
-    status: 'approx',
-    img: null,
-    note: 'Childhood classes with certificates. The studio, the years and what each certificate was awarded for still need to be filled in.'
   },
 
   /* ---------- PROJECTS AND HACKATHONS ---------- */
