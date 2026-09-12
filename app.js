@@ -1,12 +1,13 @@
 /* ============================================================================
    app.js — behaviour shared by index.html and ru.html
 
-   Ported from design-preview.html, in five parts:
+   Ported from design-preview.html, in six parts:
      1. the burger toggle
      2. closing the drawer when a link inside it is clicked
      3. the scrollspy that highlights the tab for the section you are looking at
      4. the awards grid: cards, category chips, year and status filters
      5. the lightbox that opens when a card is clicked
+     6. the experience list, built from the EXPERIENCE array
 
    The scroll-reveal animations live in the prototype and arrive in a later step.
    ========================================================================= */
@@ -123,11 +124,48 @@
      #awards until a later step, so without this filter the list would contain
      null and s.offsetTop would throw "Cannot read properties of null" on every
      single scroll event. Boolean as the filter callback drops null entries. */
-  var secs = ['about', 'awards', 'projects', 'contact']
+  var secs = ['about', 'awards', 'projects', 'experience', 'contact']
     .map(function (id) { return document.getElementById(id); })
     .filter(Boolean);
 
+  /* --------------------------------------------------------------------------
+     LESSON 39 — AN EXPLICIT CLICK OUTRANKS A GUESS
+
+     spy() is a GUESS about what you are reading, made from the scroll
+     position. A click on a tab is not a guess: it names the section you want.
+     The two used to disagree. Clicking Projects scrolled as far as the page
+     would go - the very bottom - and the bottom-of-page rule from LESSON 27
+     promptly decided you were reading Contact. You asked for Projects, and the
+     header told you Contact.
+
+     So a clicked tab is PINNED. While a pin is set, spy() shows the pinned
+     tab and does no guessing. The pin lasts until you move the page yourself -
+     a wheel turn, a press, a key - because that is when a guess starts to mean
+     something again.
+
+     Why not simply drop the pin on the next scroll event? Because the click
+     CAUSES one: jumping to #projects fires a scroll event a moment later, and
+     "unpin on scroll" would throw the pin away before it had done its job.
+
+     And why pointerdown rather than click for unpinning? It fires first. Press
+     a tab: pointerdown clears the old pin, then click sets the new one - in
+     that order, every time. Press the logo, the scrollbar or a card, and the
+     pin is simply cleared.
+  -------------------------------------------------------------------------- */
+  var pinned = null;
+
+  function highlight(id) {
+    links.forEach(function (a) {
+      a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+    });
+  }
+
   function spy() {
+    if (pinned) {
+      highlight(pinned);
+      return;
+    }
+
     var cur = null;
 
     var atBottom = window.scrollY + window.innerHeight >=
@@ -142,10 +180,19 @@
       });
     }
 
-    links.forEach(function (a) {
-      a.classList.toggle('is-active', a.getAttribute('href') === '#' + cur);
-    });
+    highlight(cur);
   }
+
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      pinned = a.getAttribute('href').slice(1);
+      highlight(pinned);
+    });
+  });
+
+  ['wheel', 'pointerdown', 'keydown'].forEach(function (type) {
+    window.addEventListener(type, function () { pinned = null; }, { passive: true });
+  });
 
   window.addEventListener('scroll', spy, { passive: true });
   spy();
@@ -837,6 +884,74 @@
     }
 
     render();
+  }
+
+  /* ==========================================================================
+     6. EXPERIENCE
+
+     LESSON 40 — LET THE PAGE SAY WHAT IS ALREADY SHOWN
+
+     EXPERIENCE in data.js includes Deliox and QozGal, and both already have a
+     card in #projects. Listing them here too would show the same thing twice,
+     once as a project and once as experience.
+
+     The obvious fix is a hardcoded skip list: ['Deliox', 'QozGal']. It works
+     today, and it quietly goes wrong the day a fourth project card is added
+     to the HTML and nobody remembers that the list exists.
+
+     So the skip list is READ FROM THE PAGE instead. The <h3> titles of the
+     project cards ARE the list of what #projects already shows. An EXPERIENCE
+     entry is skipped when the part of its title before " — " matches one:
+
+       'Deliox — founder'                    -> 'Deliox'    in #projects, skip
+       'QozGal — a transit service for ...'  -> 'QozGal'    in #projects, skip
+       'Football'                            -> 'Football'  not there, show
+
+     One fact - "this is shown as a project" - lives in one place, the HTML,
+     and this list follows it.
+     ====================================================================== */
+  var expList = document.getElementById('expList');
+
+  if (expList && typeof EXPERIENCE !== 'undefined') {
+    initExperience(EXPERIENCE);
+  }
+
+  function initExperience(entries) {
+    var shownAsProjects = [].map.call(
+      document.querySelectorAll('#projects .proj h3'),
+      function (h) { return h.textContent.trim(); }
+    );
+
+    var list = entries.filter(function (e) {
+      return shownAsProjects.indexOf(e.t.split(' — ')[0].trim()) === -1;
+    });
+
+    list.forEach(function (e) {
+      var li = document.createElement('li');
+      li.className = 'exp';
+
+      var h3 = document.createElement('h3');
+      h3.textContent = e.t;
+      li.appendChild(h3);
+
+      /* Same null rule as the award cards: a missing field adds no element. */
+      if (e.period) {
+        var period = document.createElement('span');
+        period.className = 'period';
+        period.textContent = e.period;
+        li.appendChild(period);
+      }
+
+      if (e.note) {
+        var p = document.createElement('p');
+        p.textContent = e.note;
+        li.appendChild(p);
+      }
+
+      expList.appendChild(li);
+    });
+
+    setText(document.getElementById('expCount'), list.length);
   }
 
   /* Small helper: write text into an element only if the element exists, so a

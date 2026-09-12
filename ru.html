@@ -77,6 +77,7 @@
         <a class="tab" href="#about">Обо мне</a>
         <a class="tab" href="#awards">Грамоты</a>
         <a class="tab" href="#projects">Проекты</a>
+        <a class="tab" href="#experience">Опыт</a>
         <a class="tab" href="#contact">Контакты</a>
       </nav>
 
@@ -98,6 +99,7 @@
     <a href="#about">Обо мне</a>
     <a href="#awards">Грамоты</a>
     <a href="#projects">Проекты</a>
+    <a href="#experience">Опыт</a>
     <a href="#contact">Контакты</a>
   </div>
 
@@ -195,48 +197,94 @@
 
     </section>
 
-    <!-- ================= ПРОЕКТЫ ================= -->
-    <section id="projects">
-      <h2>Проекты</h2>
+    <!-- ================= ПРОЕКТЫ =================
+         Три проекта написаны в разметке вручную, не из массива. Описания —
+         по-английски, как и записи грамот: это первые предложения записей из
+         data.js. Подписи статусов — интерфейс, поэтому по-русски.
+         Подробнее — index.html, раздел PROJECTS.
+         =========================================== -->
+    <section class="sec wrap" id="projects">
 
-      <p>Проектные конкурсы, научные ярмарки, хакатоны и то, что я создал сам.</p>
+      <div class="sec-head">
+        <h2>Проекты</h2>
+        <span class="count">3</span>
+      </div>
 
-      <article class="achievement">
-        <h3>ПРИМЕР — Школьная научная ярмарка, победитель</h3>
-        <p>
-          <time datetime="2025-04-12">12 апреля 2025</time> ·
-          Алматы ·
-          Школа № 000
-        </p>
-        <p>
-          ЗАМЕНИТЬ. Для проектов описывайте ПРОБЛЕМУ, которую вы решили, а не только
-          технологию. «Приложение, которое помогает ученикам следить за дедлайнами,
-          им пользуются 60 одноклассников» звучит гораздо сильнее, чем «сделал
-          приложение на Python».
-        </p>
+      <p class="sec-note">
+        То, что дошло дальше идеи. Описание — про задачу, а не про технологии.
+      </p>
 
-        <!-- target="_blank" открывает в новой вкладке, rel="noopener" — защита. -->
-        <p>
-          Ссылка:
-          <a href="https://example.com" target="_blank" rel="noopener">
-            ЗАМЕНИТЬ — ссылка на проект, репозиторий GitHub или видео
-          </a>
-        </p>
+      <div class="proj-list">
 
-      </article>
+        <article class="proj">
+          <div class="proj-mark" aria-hidden="true">DX</div>
+          <div>
+            <h3>Deliox</h3>
+            <p>An AI trainer for cold sales calls.</p>
+          </div>
+          <span class="status wip">в работе</span>
+        </article>
+
+        <article class="proj">
+          <div class="proj-mark" aria-hidden="true">QG</div>
+          <div>
+            <h3>QozGal</h3>
+            <p>An app that picks the right bus and tells you when to get off.</p>
+          </div>
+          <span class="status wip">осень 2026</span>
+        </article>
+
+        <article class="proj">
+          <div class="proj-mark" aria-hidden="true">SB</div>
+          <div>
+            <h3>Sabaqtas</h3>
+            <p>A Social Impact track project at the Future Minds Hackathon 2026.</p>
+          </div>
+          <span class="status soon">грамота в пути</span>
+        </article>
+
+      </div>
 
     </section>
 
+    <!-- ================= ОПЫТ =================
+         Строится в app.js из массива EXPERIENCE в data.js. Deliox и QozGal уже
+         есть выше как проекты, поэтому здесь пропускаются: app.js сверяется с
+         заголовками карточек проектов (app.js, УРОК 40). Зачем role="list" —
+         index.html, раздел EXPERIENCE.
+         ======================================== -->
+    <section class="sec wrap" id="experience">
 
-    <!-- ================= КОНТАКТЫ ================= -->
-    <section id="contact">
-      <h2>Контакты</h2>
+      <div class="sec-head">
+        <h2>Опыт</h2>
+        <!-- Заполняется в app.js: сколько записей показано. -->
+        <span class="count" id="expCount"></span>
+      </div>
 
-      <ul>
-        <li>Почта: <a href="mailto:ЗАМЕНИТЬ@example.com">ЗАМЕНИТЬ@example.com</a></li>
-        <li>GitHub: <a href="https://github.com/ЗАМЕНИТЬ" target="_blank" rel="noopener">github.com/ЗАМЕНИТЬ</a></li>
-        <li>Telegram: <a href="https://t.me/ЗАМЕНИТЬ" target="_blank" rel="noopener">@ЗАМЕНИТЬ</a></li>
-      </ul>
+      <p class="sec-note">То, что реально было, но грамотой или сертификатом не подтверждено.</p>
+
+      <!-- Строится в app.js: по одному <li class="exp"> на запись. -->
+      <ul class="exp-list" id="expList" role="list"></ul>
+
+    </section>
+
+    <!-- ================= КОНТАКТЫ =================
+         Сетка ссылок из прототипа: без списка, без маркеров, без подчёркивания.
+         target="_blank" открывает в новой вкладке, rel="noopener" — защита
+         (index.html, УРОК 11c). Протокол mailto: — УРОК 11d.
+         ============================================= -->
+    <section class="sec wrap" id="contact">
+
+      <div class="sec-head">
+        <h2>Контакты</h2>
+      </div>
+
+      <div class="contact-grid">
+        <a href="mailto:ЗАМЕНИТЬ@example.com"><span>Почта</span>ЗАМЕНИТЬ@example.com</a>
+        <a href="https://github.com/ЗАМЕНИТЬ" target="_blank" rel="noopener"><span>GitHub</span>github.com/ЗАМЕНИТЬ</a>
+        <a href="https://t.me/ЗАМЕНИТЬ" target="_blank" rel="noopener"><span>Telegram</span>@ЗАМЕНИТЬ</a>
+      </div>
+
     </section>
 
   </main>

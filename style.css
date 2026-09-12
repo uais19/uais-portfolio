@@ -280,6 +280,11 @@
   }
   .proj h3{font-size:19px;font-weight:600;margin-bottom:5px}
   .proj p{margin:0 0 10px;color:var(--muted);font-size:15px;max-width:60ch}
+  /* In the prototype a .stack row of tags always followed the paragraph and
+     closed off the card. These cards have no tags - nothing in data.js backs a
+     technology list yet - so without this the paragraph's own bottom margin
+     would leave the card 10px taller at the bottom than at the top. */
+  .proj p:last-child{margin-bottom:0}
   .stack{display:flex;gap:6px;flex-wrap:wrap}
   .stack span{
     font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--muted);
@@ -292,6 +297,22 @@
   .status.live{background:rgba(122,168,106,.16);color:#9CC98A;border:1px solid rgba(122,168,106,.32)}
   .status.wip{background:rgba(194,112,61,.16);color:#E0955F;border:1px solid rgba(194,112,61,.34)}
   .status.soon{background:rgba(214,186,157,.10);color:var(--muted);border:1px solid var(--line-strong)}
+
+  /* ---------- experience ---------- */
+  /* Deliberately quieter than the project cards: rows between hairlines, not
+     boxed cards. Nothing here has a certificate behind it, and the layout
+     should not dress these entries up to look like the ones that do.
+     list-style:none removes the bullets; role="list" in the HTML keeps Safari
+     announcing it as a list anyway. padding-block, never the shorthand.
+     No new colours. */
+  .exp-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .exp{
+    display:grid;grid-template-columns:1fr auto;column-gap:18px;row-gap:4px;align-items:baseline;
+    padding-block:16px;border-bottom:1px solid var(--line);
+  }
+  .exp h3{font-size:17px;font-weight:600}
+  .exp .period{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--accent);white-space:nowrap}
+  .exp p{grid-column:1 / -1;margin:0;color:var(--muted);font-size:15px;max-width:60ch}
 
   /* ---------- contact ---------- */
   .contact-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
@@ -455,6 +476,10 @@
     .proj{grid-template-columns:44px 1fr;gap:14px}
     .proj-mark{width:44px;height:44px;font-size:15px}
     .status{grid-column:2}
+    /* Experience rows: the period drops under the title instead of squeezing
+       it from the right. */
+    .exp{grid-template-columns:1fr}
+    .exp .period{white-space:normal}
     .year-sel{margin-left:0;width:100%}
 
     /* Lightbox on a phone. Narrow side padding gives the scan the width; the
