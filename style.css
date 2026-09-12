@@ -17,6 +17,11 @@
     --mono:"JetBrains Mono",ui-monospace,monospace;
     --maxw:1180px;
     --header-h:64px;
+    /* Side gutter. ONE value for the whole page: .wrap, the header .head-in and
+       the mobile .drawer all read it, so the logo, the nav links, the hero title,
+       the chips and the cards sit on a single vertical edge. Change it here and
+       every one of them moves together. */
+    --gutter:24px;
   }
 
   *{box-sizing:border-box}
@@ -39,7 +44,12 @@
       radial-gradient(900px 420px at 78% -6%, rgba(194,112,61,.14), transparent 62%),
       radial-gradient(760px 400px at 2% 14%, rgba(120,78,48,.20), transparent 60%);
   }
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  /* padding-inline, not the padding shorthand. This matters: .hero and .sec both
+     also carry .wrap, and both set their own vertical padding. A shorthand in
+     either place resets ALL four sides, so whichever rule came last won and the
+     gutter was silently wiped out - see the note on .hero below. Using the
+     logical long-hands means the two rules cannot overwrite each other. */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter)}
   a{color:inherit}
   img{max-width:100%}
   h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
@@ -55,7 +65,7 @@
     border-bottom:1px solid var(--line);
   }
   .head-in{
-    max-width:var(--maxw);margin:0 auto;padding:0 20px;height:100%;
+    max-width:var(--maxw);margin:0 auto;padding-inline:var(--gutter);height:100%;
     display:flex;align-items:center;gap:20px;
   }
   .brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex:0 0 auto}
@@ -109,7 +119,7 @@
   .drawer{
     position:fixed;left:0;right:0;top:var(--header-h);z-index:55;
     background:var(--ground-2);border-bottom:1px solid var(--line);
-    padding:8px 20px 18px;
+    padding-block:8px 18px;padding-inline:var(--gutter);
     display:none;
     transform:translateY(-8px);opacity:0;
     transition:transform .24s ease,opacity .24s ease;
@@ -124,7 +134,12 @@
 
   /* ---------- hero ---------- */
   main{position:relative;z-index:1}
-  .hero{padding:72px 0 52px}
+  /* padding-BLOCK only. This element is class="hero wrap": it needs its own top
+     and bottom spacing, but the left and right must stay with --gutter from
+     .wrap. Written as "padding:72px 0 52px" it also set padding-inline:0, and
+     because this rule sits after .wrap at the same specificity it won - which is
+     why the hero title used to sit flush against the edge of the screen. */
+  .hero{padding-block:72px 52px}
   .eyebrow{
     font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     color:var(--accent);margin:0 0 18px;
@@ -143,7 +158,8 @@
   .stat span{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
 
   /* ---------- sections ---------- */
-  .sec{padding:56px 0;border-top:1px solid var(--line)}
+  /* Same reason as .hero: block-only, so .wrap keeps the side gutters. */
+  .sec{padding-block:56px;border-top:1px solid var(--line)}
   .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
   .sec-head h2{font-size:clamp(24px,3.4vw,34px);font-weight:600;letter-spacing:-.01em}
   .sec-head .count{font-family:var(--mono);font-size:12px;color:var(--accent)}
@@ -334,7 +350,23 @@
     .drawer{display:block;pointer-events:none}
     .drawer:not(.open){transform:translateY(-14px);opacity:0}
     .drawer.open{pointer-events:auto}
-    .hero{padding:48px 0 36px}
+    .hero{padding-block:48px 36px}
+
+    /* Hero leading, relaxed for phone sizes.
+       line-height 1.02 and letter-spacing -.02em are display settings: at 74px
+       they read as tight and deliberate. At 38px the same numbers just look
+       jammed, and the h1 wraps to two or three lines here, so the lines start
+       touching. Optical tightening should scale with size, not be fixed.
+       The desktop values are untouched. */
+    .hero h1{line-height:1.12;letter-spacing:-.005em}
+
+    /* Card titles, same reasoning one size down. 1.32 is fine for a title that
+       fits on one line, but these wrap, and at 15px the wrapped lines sit only
+       19.8px apart - tight enough that a two-line title reads as one block of
+       text. 1.42 separates the lines without changing the card height for the
+       majority of titles, which are a single line. */
+    .card-body h3{line-height:1.42}
+
     .proj{grid-template-columns:44px 1fr;gap:14px}
     .proj-mark{width:44px;height:44px;font-size:15px}
     .status{grid-column:2}
