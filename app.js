@@ -388,6 +388,27 @@
       return catOk && yearOk && statusOk;
     }
 
+    /* ---- where a scan lives ---------------------------------------------
+       LESSON 31b — DERIVING A PATH INSTEAD OF STORING IT
+
+       data.js stores only the BARE FILENAME: img: 'daryn-2026.jpg'. The two
+       folders it can be found in are built here:
+
+           images/thumbs/daryn-2026.jpg    400 px, drawn on the card
+           images/full/daryn-2026.jpg     1200 px, opened in the lightbox
+
+       Both files are produced from one original by tools/make-images.mjs.
+
+       The alternative - writing the full path into data.js - would mean
+       storing the same filename twice, once per size, and every card would
+       have to be edited by hand if the folders were ever renamed. One fact,
+       one place: the same "single source of truth" rule that keeps the card
+       text out of the HTML.
+    */
+    function imgSrc(size, file) {
+      return 'images/' + size + '/' + file;
+    }
+
     /* ---- one card -------------------------------------------------------
        LESSON 32 — WHY THIS BUILDS NODES INSTEAD OF PASTING HTML STRINGS
 
@@ -430,10 +451,13 @@
       if (item.img) {
         /* A real scan. .has-img switches off the CSS paper drawing in
            style.css; the 4/3 aspect-ratio on .thumb is what keeps this card
-           exactly as tall as a placeholder one. */
+           exactly as tall as a placeholder one.
+
+           The card gets the 400 px copy. The 1200 px one - imgSrc('full', ...)
+           - is not downloaded until the lightbox step asks for it. */
         thumb.classList.add('has-img');
         var img = document.createElement('img');
-        img.src = item.img;
+        img.src = imgSrc('thumbs', item.img);
         img.alt = item.t;          /* the title describes the scan */
         img.loading = 'lazy';
         thumb.appendChild(img);

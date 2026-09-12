@@ -1,0 +1,15 @@
+{
+  "name": "portfolio-tools",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local developer tools for the portfolio. Not part of the site: the site itself is plain HTML, CSS and vanilla JS with no build step and no dependencies. This package.json lives in tools/ rather than at the project root exactly so that Vercel never sees it and never tries to build anything.",
+  "scripts": {
+    "images": "node make-images.mjs"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

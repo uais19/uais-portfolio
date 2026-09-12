@@ -491,7 +491,11 @@
          LESSON 17 — THE <img> TAG  (moved here from the old Sport section,
          because the card images are now built in app.js)
 
-           src   = path to the file, relative: "images/sport-judo-2025.jpg"
+           src   = path to the file, relative. data.js stores only the bare
+                   filename - img: 'sport-judo-2025.jpg' - and app.js builds
+                   "images/thumbs/sport-judo-2025.jpg" for the card and
+                   "images/full/sport-judo-2025.jpg" for the lightbox. Both
+                   files come from one original photo, see images/README.md.
            alt   = what the image SHOWS, as a sentence. Read aloud by screen
                    readers, displayed if the file is missing, used by Google.
                    app.js passes the award's title as the alt text.

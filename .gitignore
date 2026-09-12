@@ -12,3 +12,10 @@ ehthumbs.db
 
 # Vercel (created later, when you deploy)
 .vercel/
+
+# Original phone photos. Big, and they still carry EXIF and GPS coordinates.
+# Only the processed copies in images/thumbs/ and images/full/ are committed.
+_raw/
+
+# Installed by tools/package.json for the image script. Never shipped.
+node_modules/
