@@ -46,6 +46,24 @@ comment in the same style when you introduce a new pattern.
 Work in small steps: one section per commit, and stop after each step so the change can be
 checked in a browser.
 
+## Never discard uncommitted work
+
+**Do not run `git checkout --`, `git restore` or `git stash` across the whole tree, and
+never on `data.js`.** Not `git checkout -- .`, not `git restore .`, not `git stash` with no
+paths — including as cleanup after a temporary test edit.
+
+This repository receives edits from outside the session. `data.js` in particular is written
+directly, by hand and by other tools, between one message and the next. A tree-wide discard
+throws that work away silently: the file goes back to HEAD, and nothing in the output says
+a foreign edit was destroyed.
+
+To undo your own experiment, revert the specific lines you wrote, or name the exact file you
+touched. Prefer not writing the experiment to disk at all — a temporary change made to test
+rendering belongs in the browser's page memory, not in a tracked file.
+
+When in doubt, run `git status`, show it, and ask. Discarding is not recoverable; asking
+costs one message.
+
 ## Do not add
 
 - analytics or tracking of any kind
