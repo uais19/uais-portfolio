@@ -396,53 +396,79 @@
          section from here on repeats it:
 
            <section class="sec wrap">   sec = top border + vertical padding
-             <div class="sec-head">     the heading row
-               <h2>...</h2>
-               <span class="count">     optional counter on the right
-             <p class="sec-note">       the grey intro line under the heading
+             <div class="sec-intro">    heading + prose; two columns above 1024px
+               <div class="sec-head">   the heading row
+                 <h2>...</h2>
+                 <span class="count">   optional counter on the right
+               <p class="sec-note">     the grey intro line under the heading
+
+         .sec-intro is used only where there is prose beside the heading: here,
+         #awards and #experience. #projects and #contact keep the heading and
+         the note as plain children of the section. See LESSON 41 just below.
          ================================================================== -->
     <section class="sec wrap" id="about">
-      <div class="sec-head">
-        <h2>About me</h2>
+      <!--
+        LESSON 41 — TWO COLUMNS WITH CSS GRID, AND WHY A WRAPPER
+
+        On a wide screen the heading sits in a narrow column on the left and
+        the prose in a wider one on the right. The paragraphs keep exactly the
+        same line length (62ch); the extra width is filled by layout, not by
+        longer lines, which would be harder to read.
+
+        .sec-intro groups the heading and the prose, and only THAT element
+        becomes a grid (style.css). Why not make the whole <section> the grid?
+        In #awards the filter bar is position:sticky, and a sticky element can
+        only stick inside its containing block. A grid item's containing block
+        is its own grid cell - so the bar would stick for exactly its own
+        height, which is to say not at all. With the wrapper, the filters and
+        the cards stay outside the grid, full width, exactly as before.
+
+        Below 1025px .sec-intro has no CSS rules at all: it is an ordinary
+        block, which is why the single-column layout is unchanged there.
+      -->
+      <div class="sec-intro">
+        <div class="sec-head">
+          <h2>About me</h2>
+        </div>
+
+        <!--
+          LESSON 14 — BLOCK vs INLINE elements
+
+          BLOCK elements start on a new line and take the full available width:
+            <p> <div> <h1>-<h6> <section> <article> <ul> <li> <figure> <header>
+
+          INLINE elements sit inside a line of text and are only as wide as their
+          content:
+            <a> <span> <strong> <em> <img> <time> <code> <br>
+
+          The practical rule you get tested on: you may put an inline element
+          inside a block element, but NEVER put a block element inside <p>.
+          <p><div>text</div></p> is invalid HTML and browsers will silently
+          rearrange your page to fix it.
+        -->
+        <p class="sec-note">
+          REPLACE THIS TEXT. Write two or three paragraphs about yourself: where you
+          study, what subjects you love, what you want to study at university and why.
+          Admissions officers are reading for motivation and consistency, not for a
+          list of adjectives.
+        </p>
+
+        <p class="sec-note">
+          REPLACE THIS TEXT. A good second paragraph explains what connects your
+          achievements. For example: how sport taught you discipline that you then
+          applied to olympiad preparation, or how a project grew out of a problem you
+          personally ran into.
+        </p>
+
+        <!--
+          <strong> and <em> are semantic too, and this is a common test trap:
+            <strong> = importance      <b> = just bold pixels, no meaning
+            <em>     = emphasis        <i> = just italic pixels, no meaning
+          A screen reader changes its tone for <strong>/<em> and ignores <b>/<i>.
+          So prefer <strong> and <em>.
+        -->
+        <p class="sec-note">Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
       </div>
-
-      <!--
-        LESSON 14 — BLOCK vs INLINE elements
-
-        BLOCK elements start on a new line and take the full available width:
-          <p> <div> <h1>-<h6> <section> <article> <ul> <li> <figure> <header>
-
-        INLINE elements sit inside a line of text and are only as wide as their
-        content:
-          <a> <span> <strong> <em> <img> <time> <code> <br>
-
-        The practical rule you get tested on: you may put an inline element
-        inside a block element, but NEVER put a block element inside <p>.
-        <p><div>text</div></p> is invalid HTML and browsers will silently
-        rearrange your page to fix it.
-      -->
-      <p class="sec-note">
-        REPLACE THIS TEXT. Write two or three paragraphs about yourself: where you
-        study, what subjects you love, what you want to study at university and why.
-        Admissions officers are reading for motivation and consistency, not for a
-        list of adjectives.
-      </p>
-
-      <p class="sec-note">
-        REPLACE THIS TEXT. A good second paragraph explains what connects your
-        achievements. For example: how sport taught you discipline that you then
-        applied to olympiad preparation, or how a project grew out of a problem you
-        personally ran into.
-      </p>
-
-      <!--
-        <strong> and <em> are semantic too, and this is a common test trap:
-          <strong> = importance      <b> = just bold pixels, no meaning
-          <em>     = emphasis        <i> = just italic pixels, no meaning
-        A screen reader changes its tone for <strong>/<em> and ignores <b>/<i>.
-        So prefer <strong> and <em>.
-      -->
-      <p class="sec-note">Languages: <strong>Kazakh</strong>, <strong>Russian</strong>, <strong>English</strong>.</p>
     </section>
 
     <!-- ==================================================================
@@ -529,18 +555,20 @@
          ================================================================== -->
     <section class="sec wrap" id="awards">
 
-      <div class="sec-head">
-        <h2>Awards</h2>
-        <!-- Filled in by app.js: "showing 14 of 14". Empty here so that a
-             stale number can never be shown if the script fails. -->
-        <span class="count" id="shown"></span>
-      </div>
+      <div class="sec-intro">
+        <div class="sec-head">
+          <h2>Awards</h2>
+          <!-- Filled in by app.js: "showing 14 of 14". Empty here so that a
+               stale number can never be shown if the script fails. -->
+          <span class="count" id="shown"></span>
+        </div>
 
-      <p class="sec-note">
-        Every entry below is a real record. Scans are still being collected, so
-        cards without an image show a placeholder, and entries whose year is not
-        yet confirmed are grouped under "year to confirm".
-      </p>
+        <p class="sec-note">
+          Every entry below is a real record. Scans are still being collected, so
+          cards without an image show a placeholder, and entries whose year is not
+          yet confirmed are grouped under "year to confirm".
+        </p>
+      </div>
 
       <!-- Built by app.js: one chip per category plus "All", then the year
            select. The .filters bar is position:sticky, so it stays under the
@@ -638,13 +666,15 @@
          ================================================================== -->
     <section class="sec wrap" id="experience">
 
-      <div class="sec-head">
-        <h2>Experience</h2>
-        <!-- Filled in by app.js with the number of entries shown. -->
-        <span class="count" id="expCount"></span>
-      </div>
+      <div class="sec-intro">
+        <div class="sec-head">
+          <h2>Experience</h2>
+          <!-- Filled in by app.js with the number of entries shown. -->
+          <span class="count" id="expCount"></span>
+        </div>
 
-      <p class="sec-note">Things that really happened but have no certificate behind them.</p>
+        <p class="sec-note">Things that really happened but have no certificate behind them.</p>
+      </div>
 
       <!-- Built by app.js: one <li class="exp"> per entry. -->
       <ul class="exp-list" id="expList" role="list"></ul>

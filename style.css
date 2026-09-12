@@ -22,6 +22,11 @@
        the chips and the cards sit on a single vertical edge. Change it here and
        every one of them moves together. */
     --gutter:24px;
+    /* The vertical step after a section's intro prose. One value for both
+       layouts: .sec-note's bottom margin in the single column, and the row gap
+       and bottom margin of .sec-intro in the two-column layout above 1024px.
+       Naming it is what keeps the two layouts from drifting apart. */
+    --note-gap:28px;
   }
 
   *{box-sizing:border-box}
@@ -163,7 +168,54 @@
   .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:8px;flex-wrap:wrap}
   .sec-head h2{font-size:clamp(24px,3.4vw,34px);font-weight:600;letter-spacing:-.01em}
   .sec-head .count{font-family:var(--mono);font-size:12px;color:var(--accent)}
-  .sec-note{color:var(--muted);margin:0 0 28px;max-width:62ch}
+  .sec-note{color:var(--muted);margin:0 0 var(--note-gap);max-width:62ch}
+
+  /* ---------- text sections: two columns above 1024px ---------- */
+  /* .sec-intro wraps a section's heading and its prose: #about, and the intro
+     note of #awards and #experience. Below the breakpoint it has NO rules at
+     all, so the single column - heading above text - is exactly what it was.
+
+     Above 1024px it becomes a two-column grid:
+       - the tracks are fractions of the .wrap content box, which is --maxw
+         minus two --gutter (or the window minus two --gutter when the window
+         is narrower). 1fr for the heading, 2fr for the prose - no pixel
+         widths, so the split follows the container at every size;
+       - the space between the columns is --gutter, the same step as the page
+         edge;
+       - the heading starts at the content edge: the same vertical line as the
+         logo, the filter chips and the first card;
+       - the prose keeps .sec-note's max-width:62ch. The 2fr column is wider
+         than that at every width from 1025px up, so the line length neither
+         shrinks nor grows. The extra width goes to layout, not to longer lines.
+
+     Spacing is gap, not margins: row-gap between paragraphs, column-gap
+     between the columns. Margins inside a grid never collapse, so the
+     children's own margins are zeroed and the step below the whole block is
+     restated once, from the same --note-gap.
+
+     align-items:baseline sets the first line of the prose on the heading's
+     baseline, instead of on the top of the heading's much taller line box.
+
+     Why a wrapper rather than making the whole <section> the grid: the #awards
+     filter bar is position:sticky, and a sticky element only sticks inside its
+     containing block. A grid item's containing block is its own grid cell, so
+     the bar would stick for exactly its own height - that is, not at all.
+
+     min-width:1025px, because "above 1024" does not include 1024 itself - the
+     same way 860px already gets the phone header. */
+  @media (min-width:1025px){
+    .sec-intro{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(0,2fr);
+      column-gap:var(--gutter);
+      row-gap:var(--note-gap);
+      align-items:baseline;
+      margin-bottom:var(--note-gap);
+    }
+    .sec-intro > *{margin:0}
+    .sec-intro > .sec-head{grid-column:1}
+    .sec-intro > .sec-note{grid-column:2}
+  }
 
   /* ---------- filters ---------- */
   .filters{
