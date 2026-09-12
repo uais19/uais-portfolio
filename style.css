@@ -326,8 +326,14 @@
     display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;
   }
 
+  /* <footer class="wrap"> in the HTML, and padding-BLOCK here - the same fix
+     as .hero and .sec. The footer had neither: without .wrap it had no gutter
+     at all, so its text sat against the window edge. The old shorthand
+     "padding:28px 0 46px" also zeroes the sides. .wrap's class selector would
+     outrank this type selector today, but leaning on specificity is exactly
+     how the hero lost its gutter, so the sides are simply left alone. */
   footer{
-    border-top:1px solid var(--line);padding:28px 0 46px;color:var(--muted);font-size:13px;
+    border-top:1px solid var(--line);padding-block:28px 46px;color:var(--muted);font-size:13px;
     display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
   }
 

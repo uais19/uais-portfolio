@@ -46,7 +46,7 @@ hero                    имя, подзаголовок, 4 счётчика
 #projects               Deliox, QozGal, Sabaqtas — три карточки, в разметке вручную
 #experience             опыт без документа — из EXPERIENCE, кроме того, что уже в #projects
 #contact                три ссылки сеткой
-footer
+footer                  `.wrap` — те же поля `--gutter`, что у секций и шапки
 ```
 
 Порядок секций: **hero → about → awards → projects → experience → contact**. Вкладок в шапке
