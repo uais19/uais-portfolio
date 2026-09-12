@@ -189,7 +189,8 @@
       <!-- Строится в app.js: чипсы категорий + «Все» и выбор года. -->
       <div class="filters" id="filters"></div>
 
-      <!-- Строится в app.js: по одному <article class="card"> на запись. -->
+      <!-- Строится в app.js: по одному <button class="card"> на запись.
+           Клик по карточке открывает лайтбокс в конце файла. -->
       <div class="grid" id="grid"></div>
 
     </section>
@@ -247,6 +248,35 @@
   <footer>
     <p>© 2026 Лесхан Уаис</p>
   </footer>
+
+  <!--
+    Лайтбокс: один пустой диалог, app.js заполняет его из записи, по которой
+    кликнули. Зачем role="dialog", aria-modal и aria-labelledby — index.html,
+    УРОК 35. Подписи кнопок здесь по-русски; текст самой записи — английский,
+    как в data.js.
+  -->
+  <div class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+    <button class="lb-close" id="lbClose" type="button" aria-label="Закрыть">×</button>
+    <div class="lb-card">
+      <div class="lb-sheet" id="lbSheet"></div>
+      <div class="lb-body">
+        <h2 id="lbTitle" aria-live="polite"></h2>
+        <p class="lb-meta" id="lbMeta"></p>
+        <p class="lb-res" id="lbRes"></p>
+        <p id="lbNote"></p>
+        <figure class="lb-orig" id="lbOrig" hidden>
+          <figcaption>Как напечатано на грамоте</figcaption>
+          <blockquote><p id="lbOrigText"></p></blockquote>
+        </figure>
+        <span class="lb-flag" id="lbFlag" hidden></span>
+      </div>
+    </div>
+    <div class="lb-nav">
+      <button class="lb-arrow" id="lbPrev" type="button" aria-label="Предыдущая грамота">‹</button>
+      <span class="lb-count" id="lbCount"></span>
+      <button class="lb-arrow" id="lbNext" type="button" aria-label="Следующая грамота">›</button>
+    </div>
+  </div>
 
   <!--
     Те же data.js и app.js, что и в английской версии — по одному файлу на обе

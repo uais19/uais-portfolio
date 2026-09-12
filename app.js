@@ -1,13 +1,14 @@
 /* ============================================================================
    app.js — behaviour shared by index.html and ru.html
 
-   Ported from design-preview.html. Only three pieces are here so far:
+   Ported from design-preview.html, in five parts:
      1. the burger toggle
      2. closing the drawer when a link inside it is clicked
      3. the scrollspy that highlights the tab for the section you are looking at
+     4. the awards grid: cards, category chips, year and status filters
+     5. the lightbox that opens when a card is clicked
 
-   The lightbox, the category filters and the scroll-reveal animations live in
-   the prototype and arrive in later steps.
+   The scroll-reveal animations live in the prototype and arrive in a later step.
    ========================================================================= */
 
 /* ----------------------------------------------------------------------------
@@ -422,12 +423,22 @@
        createElement + textContent cannot have that problem, because textContent
        never parses anything as HTML. The output markup is identical.
 
-       This card is an <article>, not a <button> as in the prototype. Nothing
-       happens when you click it yet; a button that does nothing is a promise
-       the page does not keep. It becomes interactive in the lightbox step.
+       This card is a <button>, as in the prototype. Until the lightbox existed
+       it was an <article>, because a button that does nothing is a promise the
+       page does not keep. Now it opens the entry (section 5 below), and a real
+       <button> brings keyboard support for free: Tab reaches it, Enter and
+       Space press it, and a screen reader announces it as a button. A <div>
+       with a click handler would have none of that.
+
+       One honest caveat. HTML allows only inline content inside a <button>, so
+       the <div> and <h3> in here do not validate, and screen readers read the
+       <h3> as part of the button's name instead of listing it as a heading.
+       Every browser renders it correctly, and it matches the prototype - a
+       known trade-off, not an accident.
     */
     function renderCard(item) {
-      var card = document.createElement('article');
+      var card = document.createElement('button');
+      card.type = 'button';
       card.className = 'card';
 
       /* -- thumbnail -- */
@@ -454,7 +465,7 @@
            exactly as tall as a placeholder one.
 
            The card gets the 400 px copy. The 1200 px one - imgSrc('full', ...)
-           - is not downloaded until the lightbox step asks for it. */
+           - is not downloaded until the lightbox opens this entry. */
         thumb.classList.add('has-img');
         var img = document.createElement('img');
         img.src = imgSrc('thumbs', item.img);
@@ -529,15 +540,23 @@
       body.appendChild(meta);
       card.appendChild(body);
 
-      /* orig is still NOT rendered here - it belongs in the lightbox, next to
-         the scan it lets you verify. */
+      /* orig is NOT rendered on the card. It appears in the lightbox only,
+         under the note - see fillLb() below. */
 
       return card;
     }
 
     /* ---- the grid ------------------------------------------------------- */
+
+    /* The entries the grid is showing right now, in grid order. The lightbox
+       arrows walk THIS list, never items - that is the whole mechanism that
+       keeps them inside the active filter. Filter to Sport and this holds
+       three entries, so the arrows can only ever reach those three. */
+    var shownList = [];
+
     function render() {
       var list = items.filter(matches);
+      shownList = list;
 
       grid.textContent = '';   /* clear; faster and safer than innerHTML = '' */
 
@@ -547,10 +566,274 @@
         e.textContent = UI.empty;
         grid.appendChild(e);
       } else {
-        list.forEach(function (item) { grid.appendChild(renderCard(item)); });
+        list.forEach(function (item, idx) {
+          var card = renderCard(item);
+          /* The card passes ITSELF along, so the lightbox knows where to send
+             focus back on close. Reading document.activeElement instead would
+             fail in Safari, which does not focus a button when it is clicked. */
+          card.addEventListener('click', function () { openLb(idx, card); });
+          grid.appendChild(card);
+        });
       }
 
       setText(shownEl, UI.shown(list.length, items.length));
+    }
+
+    /* ==========================================================================
+       5. THE LIGHTBOX
+
+       The markup is one empty dialog at the end of index.html and ru.html -
+       LESSON 35 there explains its three ARIA attributes. The code below fills
+       it from an entry and makes it behave like a real modal window.
+       ====================================================================== */
+    var lb = document.getElementById('lb');
+    var lbEl = lb ? {
+      sheet:    document.getElementById('lbSheet'),
+      title:    document.getElementById('lbTitle'),
+      meta:     document.getElementById('lbMeta'),
+      res:      document.getElementById('lbRes'),
+      note:     document.getElementById('lbNote'),
+      orig:     document.getElementById('lbOrig'),
+      origText: document.getElementById('lbOrigText'),
+      flag:     document.getElementById('lbFlag'),
+      prev:     document.getElementById('lbPrev'),
+      next:     document.getElementById('lbNext'),
+      count:    document.getElementById('lbCount'),
+      close:    document.getElementById('lbClose')
+    } : null;
+
+    var lbIndex = 0;       /* position of the open entry inside shownList */
+    var lbOpener = null;   /* the card that opened the dialog               */
+    var lbInert = [];      /* page regions switched off while it is open    */
+    var lockedY = 0;       /* scroll position to put back on close          */
+
+    /* ---- filling it ------------------------------------------------------
+       Every optional field HIDES its slot when it is null, instead of leaving
+       an empty element behind. The spacing in style.css is flex gap, and a
+       hidden element takes no part in gap, so nothing leaves a hole. */
+    function fillLb(item) {
+      /* A fresh <img> per entry rather than swapping src on one element.
+         Swapping can leave the PREVIOUS certificate on screen, under the new
+         title, until the next file has finished downloading. */
+      lbEl.sheet.textContent = '';
+      lbEl.sheet.classList.toggle('has-img', !!item.img);
+      if (item.img) {
+        var img = document.createElement('img');
+        img.src = imgSrc('full', item.img);
+        img.alt = item.t;          /* the title describes the scan, as on the card */
+        lbEl.sheet.appendChild(img);
+      }
+
+      lbEl.title.textContent = item.t;
+
+      /* Category, year, organiser - but only the ones that exist. Joining the
+         survivors means a missing year can never leave "Studies ·  · " with a
+         separator standing next to nothing. */
+      lbEl.meta.textContent = [UI.cats[item.cat] || item.cat, item.y, item.org]
+        .filter(function (v) { return v !== null && v !== undefined && v !== ''; })
+        .join(' · ');
+
+      fillOrHide(lbEl.res, item.res);
+      fillOrHide(lbEl.note, item.note);
+
+      /* orig - the wording printed on the paper. This is the ONLY place it is
+         ever rendered. The whole <figure> goes when orig is null, caption and
+         all: a label announcing a quotation over no quotation would be a claim
+         the page cannot back. */
+      lbEl.origText.textContent = item.orig || '';
+      lbEl.orig.hidden = !item.orig;
+
+      /* Status flag: same words as the card, and the same rule - confirmed
+         says nothing (LESSON 34). */
+      var flag = item.status === 'approx' ? UI.statusApprox
+               : item.status === 'check'  ? UI.statusCheck
+               : null;
+      fillOrHide(lbEl.flag, flag);
+      lbEl.flag.classList.toggle('is-check', item.status === 'check');
+    }
+
+    function fillOrHide(el, value) {
+      el.textContent = value || '';
+      el.hidden = !value;
+    }
+
+    /* ---- moving between entries ------------------------------------------
+       The arrows STOP at the ends instead of wrapping around. In a filtered
+       set of three, wrapping makes it impossible to tell that you have seen
+       them all; stopping makes it obvious twice over - the dead arrow dims,
+       and the counter reads 3 / 3. A set of one disables both.
+
+       Disabling a button that has focus throws that focus out to <body>,
+       which is OUTSIDE the dialog. So note what was focused first, and if it
+       has just been disabled, hand focus to the other arrow - or to Close,
+       when both are dead. */
+    function showLb(index) {
+      lbIndex = Math.max(0, Math.min(index, shownList.length - 1));
+      fillLb(shownList[lbIndex]);
+      lbEl.count.textContent = (lbIndex + 1) + ' / ' + shownList.length;
+
+      var focused = document.activeElement;
+      lbEl.prev.disabled = lbIndex === 0;
+      lbEl.next.disabled = lbIndex === shownList.length - 1;
+
+      if ((focused === lbEl.prev || focused === lbEl.next) && focused.disabled) {
+        var other = focused === lbEl.prev ? lbEl.next : lbEl.prev;
+        (other.disabled ? lbEl.close : other).focus();
+      }
+    }
+
+    /* ---- opening and closing ---------------------------------------------
+       LESSON 36 — WHERE FOCUS GOES, AND WHY IT MUST COME BACK
+
+       Keyboard and screen-reader users have exactly one position on the page:
+       the focused element. Open a dialog without moving focus and they are
+       still standing on the card, BEHIND the dialog, pressing Tab through a
+       page they cannot see. So:
+
+         on open    focus moves to the Close button, inside the dialog
+         on close   focus returns to the card that opened it
+
+       Skip the return and focus drops to <body>: the next Tab starts over at
+       the logo, and someone halfway down the grid has lost their place.
+
+       inert is the other half. An inert element cannot be focused, clicked or
+       read by a screen reader. Setting it on everything outside the dialog is
+       what makes aria-modal="true" actually true - some screen readers ignore
+       aria-modal and would otherwise wander into the page behind.
+    */
+    function openLb(index, opener) {
+      if (!lb || !shownList.length) return;
+      lbOpener = opener;
+
+      showLb(index);
+      lockScroll();
+      lb.classList.add('open');
+
+      lbInert = [].slice.call(document.body.children).filter(function (el) {
+        return el !== lb && el.tagName !== 'SCRIPT' && !el.inert;
+      });
+      lbInert.forEach(function (el) { el.inert = true; });
+
+      lbEl.close.focus();
+    }
+
+    function closeLb() {
+      if (!lb.classList.contains('open')) return;
+
+      lb.classList.remove('open');
+      lbInert.forEach(function (el) { el.inert = false; });
+      lbInert = [];
+      unlockScroll();
+
+      /* preventScroll, because unlockScroll() has just put the page back
+         exactly where it was, and focus() is otherwise allowed to scroll. */
+      if (lbOpener && document.contains(lbOpener)) {
+        lbOpener.focus({ preventScroll: true });
+      }
+      lbOpener = null;
+    }
+
+    /* ---- the scroll lock -------------------------------------------------
+       LESSON 37 — WHY overflow:hidden IS NOT ENOUGH
+
+       The obvious lock is body { overflow:hidden }. On a desktop it works. On
+       iOS Safari a finger drag scrolls the page behind anyway, so the page
+       slides around under the dialog - the classic phone lightbox bug.
+
+       What works everywhere is taking the page out of scrolling altogether:
+       make <body> position:fixed. A fixed body snaps to the top of the page,
+       though, so it is ALSO shifted up by the current scroll offset
+       (top: -scrollY) to stay visually where it was - and on close the window
+       is scrolled back to that same offset.
+
+       padding-right stands in for the scrollbar, which vanishes once nothing
+       can scroll. Without it the whole page jumps sideways by the scrollbar's
+       width - about 15px on Windows - every time the dialog opens.
+
+       JavaScript only measures and flips the class; the body.lb-locked rule in
+       style.css does the positioning (LESSON 23).
+    */
+    function lockScroll() {
+      lockedY = window.scrollY;
+      var gap = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.setProperty('--lock-top', -lockedY + 'px');
+      document.body.style.setProperty('--lock-gap', gap + 'px');
+      document.body.classList.add('lb-locked');
+    }
+
+    function unlockScroll() {
+      document.body.classList.remove('lb-locked');
+      document.body.style.removeProperty('--lock-top');
+      document.body.style.removeProperty('--lock-gap');
+      window.scrollTo(0, lockedY);
+    }
+
+    /* Keep Tab inside the dialog. Only the two EDGES need handling: Tab on the
+       last control wraps to the first, Shift+Tab on the first wraps to the
+       last. Everything in between is the browser's normal Tab order. The
+       "not inside" case pulls focus back in if it has somehow got out. */
+    function trapTab(e) {
+      var stops = [].slice.call(lb.querySelectorAll(
+        'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+      ));
+      if (!stops.length) return;
+
+      var first = stops[0];
+      var last = stops[stops.length - 1];
+      var active = document.activeElement;
+      var inside = lb.contains(active);
+
+      if (e.shiftKey && (active === first || !inside)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !inside)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    /* ---- wiring ----------------------------------------------------------
+       LESSON 38 — A BACKDROP CLICK THAT IS REALLY A BACKDROP CLICK
+
+       "Close when the backdrop is clicked" is e.target === lb: the click
+       landed on the dark overlay itself, not on anything inside the card.
+
+       That test has a trap in it. Press the mouse inside the card to select a
+       sentence of the note, drag past the card's edge, let go over the
+       backdrop - and the browser fires the click on the nearest element that
+       contains BOTH ends, which is the overlay. The dialog would close in the
+       middle of selecting text. So the press has to start on the backdrop
+       too.
+    */
+    if (lb) {
+      lbEl.close.addEventListener('click', closeLb);
+      lbEl.prev.addEventListener('click', function () { showLb(lbIndex - 1); });
+      lbEl.next.addEventListener('click', function () { showLb(lbIndex + 1); });
+
+      var pressedOnBackdrop = false;
+      lb.addEventListener('pointerdown', function (e) {
+        pressedOnBackdrop = e.target === lb;
+      });
+      lb.addEventListener('click', function (e) {
+        if (e.target === lb && pressedOnBackdrop) closeLb();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('open')) return;
+
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeLb();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          if (lbIndex > 0) showLb(lbIndex - 1);
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          if (lbIndex < shownList.length - 1) showLb(lbIndex + 1);
+        } else if (e.key === 'Tab') {
+          trapTab(e);
+        }
+      });
     }
 
     render();

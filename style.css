@@ -311,33 +311,118 @@
   }
 
   /* ---------- lightbox ---------- */
+  /* Ported from the prototype. What changed, and why:
+     - .lb.open is a flex column instead of a centred grid, to make room for
+       the arrow row under the card;
+     - the card shrinks to fit the window and only .lb-body scrolls, so the
+       dialog never needs the page itself to scroll;
+     - .lb-sheet gains a real-scan variant, and the body gains the result,
+       orig, flag and navigation pieces the prototype never had.
+     No new colours: only DESIGN.md variables, plus the literals the prototype
+     already used in this block. */
   .lb{
     position:fixed;inset:0;z-index:90;display:none;
     background:rgba(18,13,9,.92);backdrop-filter:blur(6px);
     padding:24px;
   }
-  .lb.open{display:grid;place-items:center}
+  .lb.open{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
   .lb-card{
     max-width:520px;width:100%;background:var(--surface);border:1px solid var(--line-strong);
     border-radius:16px;overflow:hidden;
+    display:flex;flex-direction:column;min-height:0;
     animation:pop .24s cubic-bezier(.2,.8,.3,1);
   }
   @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
-  .lb-sheet{aspect-ratio:3/4;max-height:52vh;position:relative;background:linear-gradient(150deg,var(--paper),var(--paper-shade))}
+  /* flex:none. The placeholder has no content of its own, so without this it
+     is the first thing the column squeezes to nothing when a note is long. */
+  .lb-sheet{aspect-ratio:3/4;max-height:52vh;position:relative;flex:none;background:linear-gradient(150deg,var(--paper),var(--paper-shade))}
   .lb-sheet::before{content:"";position:absolute;inset:16px;border:1px solid rgba(46,32,22,.22)}
+  /* The prototype's label was Russian only. It is interface text, so it
+     follows the page: :lang(ru) matches everything inside <html lang="ru">. */
   .lb-sheet::after{
-    content:"здесь будет скан грамоты";
+    content:"scan to come";
     position:absolute;inset:0;display:grid;place-items:center;
     font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:rgba(46,32,22,.42);
   }
-  .lb-body{padding:18px 20px 22px}
-  .lb-body h3{font-size:18px;font-weight:600;margin-bottom:8px}
-  .lb-body p{color:var(--muted);font-size:14px;margin:0 0 12px}
+  :lang(ru) .lb-sheet::after{content:"здесь будет скан грамоты"}
+  /* A real scan. The 3/4 paper shape is dropped so a landscape certificate is
+     not boxed into a portrait frame; the image keeps its own proportions under
+     the same 52vh cap. width:100% is what fits a 1200 px file into a phone
+     column, and contain guarantees nothing is cropped off the paper. */
+  .lb-sheet.has-img{aspect-ratio:auto;background:var(--ground-2)}
+  .lb-sheet.has-img::before,.lb-sheet.has-img::after{content:none}
+  .lb-sheet img{display:block;width:100%;height:auto;max-height:52vh;object-fit:contain}
+
+  /* Spacing between the lines is flex GAP, not margins - and that is what
+     makes an omitted field leave no hole. A child with the hidden attribute
+     is display:none, and display:none takes no part in gap. With margins,
+     whichever element happened to be last in the markup would decide the
+     space under the text, hidden or not.
+     .lb-body is also the one part that scrolls; overscroll-behavior:contain
+     stops a flick at the end of a long note from being passed to the page. */
+  .lb-body{
+    padding:18px 20px 22px;
+    display:flex;flex-direction:column;gap:10px;
+    min-height:0;overflow-y:auto;overscroll-behavior:contain;overflow-wrap:anywhere;
+  }
+  .lb-body > *{margin:0}
+  /* hidden only works while no rule gives the element a display of its own.
+     Two classes outrank any one-class display rule, so a later rule cannot
+     quietly bring a hidden field back. */
+  .lb-body [hidden]{display:none}
+  .lb-body h2{font-size:18px;font-weight:600}
+  .lb-body p{color:var(--muted);font-size:14px}
+  .lb-body .lb-meta{font-family:var(--mono);font-size:12px}
+  .lb-body .lb-res{font-family:var(--display);font-weight:600;font-size:15px;color:var(--accent)}
+  /* orig: the certificate's own wording. Quieter than the note - smaller, set
+     in behind a rule, and captioned so it reads as a quotation of the paper
+     rather than as a second description. */
+  .lb-orig{border-left:2px solid var(--line-strong);padding-left:12px}
+  .lb-orig figcaption{
+    font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:4px;
+  }
+  .lb-orig blockquote{margin:0}
+  .lb-body .lb-orig p{font-size:13px}
+  /* Status flag, same words as on the card. The card's second channel carries
+     over: a dashed outline for check. align-self stops the column from
+     stretching it into a full-width bar. */
+  .lb-flag{
+    align-self:flex-start;
+    font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--line-strong);border-radius:999px;padding:3px 10px;
+  }
+  .lb-flag.is-check{border-style:dashed}
+
   .lb-close{
     position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:50%;
     background:rgba(51,39,32,.92);border:1px solid var(--line-strong);color:var(--text);
     font-size:19px;cursor:pointer;line-height:1;
   }
+  /* The arrow row. The row itself ignores the pointer, so a click on the
+     counter or between the buttons falls through to .lb and closes like any
+     other backdrop click; only the two arrows take clicks. */
+  .lb-nav{display:flex;align-items:center;gap:14px;flex:none;pointer-events:none}
+  .lb-arrow{
+    pointer-events:auto;
+    width:44px;height:44px;padding:0;border-radius:50%;
+    background:rgba(51,39,32,.92);border:1px solid var(--line-strong);color:var(--text);
+    font-size:22px;cursor:pointer;line-height:1;
+  }
+  .lb-close:hover,.lb-arrow:enabled:hover{border-color:var(--accent-deep)}
+  /* The arrows STOP at the ends of the filtered set; they do not wrap. This is
+     how that shows: the arrow with nowhere to go dims, and the counter reads
+     1 / N or N / N. */
+  .lb-arrow:disabled{opacity:.35;cursor:default}
+  .lb-count{
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    min-width:6ch;text-align:center;font-variant-numeric:tabular-nums;
+  }
+
+  /* Page scroll lock while the lightbox is open - see LESSON 37 in app.js.
+     app.js measures and sets the two custom properties; this rule does the
+     positioning. */
+  body.lb-locked{position:fixed;left:0;right:0;top:var(--lock-top,0);padding-right:var(--lock-gap,0)}
 
   /* ---------- reveal ---------- */
   .rv{opacity:1;transform:none;transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.3,1)}
@@ -371,8 +456,17 @@
     .proj-mark{width:44px;height:44px;font-size:15px}
     .status{grid-column:2}
     .year-sel{margin-left:0;width:100%}
+
+    /* Lightbox on a phone. Narrow side padding gives the scan the width; the
+       taller top keeps the close button above the card instead of sitting on
+       the corner of the certificate. */
+    .lb{padding-block:64px 16px;padding-inline:12px}
+    .lb-close{top:12px;right:12px}
   }
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.01ms !important;transition-duration:.01ms !important}
     body.js .rv.pending{opacity:1;transform:none}
+    /* The rule above already shortens every animation to .01ms. The lightbox
+       scale-in is removed outright, so nothing is left to run at all. */
+    .lb-card{animation:none}
   }
