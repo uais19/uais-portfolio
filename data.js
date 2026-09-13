@@ -132,18 +132,18 @@ const ACHIEVEMENTS = [
     res: 'volunteer',
     status: 'confirmed',
     img: 'wals-conference-volunteer-2024.jpg',
-    note: 'Volunteered at the international conference "Lesson Studies: Aspiring for Better Learning and Teaching", Astana, 24–26 September 2024. Certificate CV no. 000047.'
+    note: 'Volunteered at the international conference "Lesson Studies: Aspiring for Better Learning and Teaching", Astana, 24–26 September 2024, where I performed on the dombra for the participants. Certificate CV no. 000047.'
   },
   {
     cat: 'study',
-    t: 'Science Fair at NIS PhM Astana — organiser',
+    t: 'Science Fair at NIS PhM Astana — letter of appreciation',
     orig: 'III Өңірлік «Science Fair at NIS PhMD Astana» — алғыс хат',
     org: 'Nazarbayev Intellectual School of Physics and Mathematics, Astana',
     y: 2025,
     res: 'letter of appreciation',
     status: 'confirmed',
     img: 'nis-science-fair-organiser-2025.jpg',
-    note: 'Letter of appreciation for helping run the third regional Science Fair for student research projects. This one is for organising the event, not for competing in it.'
+    note: 'Letter of appreciation from the third regional Science Fair for student research projects. The letter credits my contribution to running the event; my own part in it was performing on the dombra. It is not an award for competing.'
   },
   {
     cat: 'study',
@@ -444,7 +444,7 @@ const ACHIEVEMENTS = [
     res: null,
     status: 'approx',
     img: null,
-    note: 'Three years of dombra and 5–6 concerts on school and city stages, including one large ensemble performance in a theatre. Some concerts came with certificates; they are not in the archive yet and each should become its own entry once found.'
+    note: 'Three years of dombra and 5–6 concerts on school and city stages, including one large ensemble performance in a theatre. Two of those performances are documented elsewhere in this archive: the WALS 2024 conference and the NIS Science Fair. The concert certificates themselves are not in the archive yet; each should become its own entry once found.'
   },
 
   /* ---------- PROJECTS AND HACKATHONS ---------- */
