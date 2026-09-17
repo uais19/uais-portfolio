@@ -64,6 +64,21 @@ rendering belongs in the browser's page memory, not in a tracked file.
 When in doubt, run `git status`, show it, and ask. Discarding is not recoverable; asking
 costs one message.
 
+The rule is the effect, not the command name. `git reset --hard`, `git clean -fd`,
+`git checkout <branch>` and `git switch` are forbidden here for the same reason: **anything
+that can replace a tracked file's contents with an older version, or remove a file you did
+not write, is a discard**, whatever it is called.
+
+The same damage happens with no git command at all. `data.js` may be edited by the site
+owner's assistant between your read and your write, so rewriting the whole file from content
+you read earlier silently drops whatever arrived in between. Never rewrite `data.js`
+wholesale: re-read it immediately before touching it, and edit specific lines only. Better
+still, do not write to `data.js` at all — you may read it, and you may `git add` and
+`git commit` it. Editing it is not your job.
+
+If you need a clean tree before committing, commit `data.js` alone, in its own commit, and
+say what was in it. Never discard to get a clean tree.
+
 ## Do not add
 
 - analytics or tracking of any kind
