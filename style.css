@@ -368,12 +368,13 @@
 
   /* ---------- contact ---------- */
   .contact-grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-  .contact-grid a{
+  .contact-grid a,.contact-grid .flat{
     display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;
     text-decoration:none;background:rgba(51,39,32,.5);
     transition:border-color .2s ease,transform .2s ease;
   }
   .contact-grid a:hover{border-color:var(--accent-deep);transform:translateY(-2px)}
+  .contact-grid .flat{color:var(--muted);cursor:default;transition:none}
   .contact-grid span{
     display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;
   }
