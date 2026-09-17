@@ -498,8 +498,8 @@ const EXPERIENCE = [
   },
   {
     t: 'QozGal — a transit service for Astana',
-    period: 'wrapping up autumn 2026',
-    note: 'An app that picks the right bus and tells you when to get off. Roughly 50–60% done. The blocker is access to real-time bus movement data.'
+    period: 'ongoing',
+    note: 'A Telegram bot that makes public transport in Astana easier to track: it picks the right bus and tells you when to get off. A bot for now. Roughly 50–60% done. The blocker is access to real-time bus movement data.'
   },
   {
     t: 'Sales experience',
