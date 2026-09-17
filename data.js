@@ -57,7 +57,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'SASMO — Silver Award',
-    orig: null,
+    orig: 'SILVER AWARD — for outstanding achievement in Grade 8, Singapore & Asian Schools Math Olympiad 2025',
     org: 'SASMO · Nazarbayev Intellectual School of Physics and Mathematics, Astana',
     y: 2025,
     res: 'Silver Award',
@@ -68,7 +68,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'SASMO — Bronze Award',
-    orig: null,
+    orig: 'BRONZE AWARD — for outstanding achievement in Grade 09, 2026 SINGAPORE AND ASIAN SCHOOLS MATH OLYMPIAD',
     org: 'SASMO · Nazarbayev Intellectual School of Science and Mathematics, Nura district of Astana',
     y: 2026,
     res: 'Bronze Award',
@@ -79,7 +79,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'American Mathematics Olympiad — Bronze Award',
-    orig: null,
+    orig: 'BRONZE AWARD — for outstanding achievement in Grade 9, 2025 AMERICAN MATHEMATICS OLYMPIAD',
     org: 'SIMCC · SIU Carbondale STEM Education Research Center',
     y: 2025,
     res: 'Bronze Award',
@@ -90,7 +90,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'Singapore Math Challenge — Commendable Award',
-    orig: null,
+    orig: 'COMMENDABLE AWARD — for outstanding achievement in Grade 9, Singapore Math Challenge 2025',
     org: 'SIMCC · STSTI',
     y: 2025,
     res: 'Commendable Award',
@@ -126,7 +126,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'WALS 2024 — conference volunteer',
-    orig: null,
+    orig: 'CERTIFICATE — This certifies that Uais Leskhan participated as a volunteer in the International Conference «Lesson Studies: Aspiring for Better Learning and Teaching» organized by the World Association for Lesson Studies and the Center of Excellence NIS',
     org: 'World Association for Lesson Studies · Center of Excellence NIS',
     y: 2024,
     res: 'volunteer',
@@ -159,7 +159,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'study',
     t: 'Admission to Nazarbayev Intellectual School',
-    orig: null,
+    orig: '«Қымбатты дос! Сені Назарбаев Зияткерлік мектебіне түсуіңмен құттықтаймыз!» / «Дорогой друг! Поздравляем тебя с поступлением в Назарбаев Интеллектуальную школу!» / «Dear friend! Congratulations on your admission to the Nazarbayev Intellectual School!»',
     org: 'Nazarbayev Intellectual Schools',
     y: null,
     res: 'admitted',
@@ -173,7 +173,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Russian Open ITF Taekwon-Do Championship — 1st place',
-    orig: null,
+    orig: 'DIPLOMA — 1 PLACE is awarded to LESHAN WIAS for participation in the Russian Open 12th Senior and Junior ITF Taekwon-Do Championship · INDIVIDUAL SPARRING 8-9 YEARS OLD (29 KG) · KLIMOVSK, Moscow region, March 25-28 2019',
     org: 'Russian Taekwon-Do ITF Federation · Klimovsk, Moscow region',
     y: 2019,
     res: '1st place',
@@ -184,7 +184,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Russian Open ITF Taekwon-Do Championship — 3rd place, team sparring',
-    orig: null,
+    orig: 'DIPLOMA — 3 PLACE is awarded to LESHAN WEISS for participation in the Russian Open 12th Senior and Junior ITF Taekwon-Do Championship · TEAM SPARRING 8-9 YEARS OLD (8-1 GUP) · KLIMOVSK, Moscow region, March 25-28 2019',
     org: 'Russian Taekwon-Do ITF Federation · Klimovsk, Moscow region',
     y: 2019,
     res: '3rd place',
@@ -195,7 +195,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Russian Open ITF Taekwon-Do Championship — 3rd place, team pattern',
-    orig: null,
+    orig: 'DIPLOMA — 3 PLACE is awarded to LESKHAN YAIS for participation in the Russian Open 12th Senior and Junior ITF Taekwon-Do Championship · TEAM PATTERN 8-9 YEARS OLD (8 - 1 GUP) · KLIMOVSK, Moscow region, March 25-28 2019',
     org: 'Russian Taekwon-Do ITF Federation · Klimovsk, Moscow region',
     y: 2019,
     res: '3rd place',
@@ -206,7 +206,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'World Taekwon-Do ITF Festival — 3rd place, sparring',
-    orig: null,
+    orig: 'DIPLOMA — Is awarded to ЛЕСХАН УАИС (Казахстан) · III место · program СПАРРИНГ · age category 8-9 лет · weight category до 30 кг (А) · WORLD TAEKWON-DO ITF FESTIVAL - 2019, ITF HQ Korea',
     org: 'ITF Headquarters Korea · National Taekwon-Do Federation of Kazakhstan',
     y: 2019,
     res: '3rd place',
@@ -217,7 +217,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Open Asian ITF Taekwon-Do Club Championship — 1st place',
-    orig: null,
+    orig: 'ДИПЛОМ — Награждается [Лесхан Уаис] за занятое I место в открытом клубном чемпионате Азии по таэквон-до ITF в весовой категории [рукописно, не читается] в возрасте 6-8 лет · город Шымкент, 2019 год',
     org: 'National Sport Federation of Taekwon-Do ITF · Shymkent',
     y: 2019,
     res: '1st place',
@@ -228,7 +228,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Open Asian ITF Taekwon-Do Club Championship — 1st place, second event',
-    orig: null,
+    orig: 'ДИПЛОМ — Награждается [Лесхан Уаис] за занятое I место в открытом клубном чемпионате Азии по таэквон-до ITF в весовой категории [-24] в возрасте 8-9 лет · город Шымкент, 2019 год',
     org: 'National Sport Federation of Taekwon-Do ITF · Shymkent',
     y: 2019,
     res: '1st place',
@@ -239,7 +239,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Taekwon-Do — 4th gup',
-    orig: null,
+    orig: 'СЕРТИФИКАТ — Казахстанская национальная федерация традиционного таэквон-до · Имя/Аты: УАИС · Фамилия/Фамилиясы: ЛЕСХАН · Тренер: АБЕНОВ Н.Ж. · Региональный филиал: Астана · Присвоен/Тағайындалған 4 гып 01.11.2019',
     org: 'Kazakhstan National Federation of Traditional Taekwon-Do',
     y: 2019,
     res: '4th gup',
@@ -253,7 +253,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — 2nd place and second category norm',
-    orig: null,
+    orig: 'Диплом — НАГРАЖДАЕТСЯ [Лесхан Уаис] За занятое II место и выполнения нормы II разряда в квалификационном турнире по шахматам · Главный судья М.Кашев · Шахматный Клуб «ШАХ и МАТ»',
     org: 'Chess club «Шах и мат» · Astana',
     y: null,
     res: '2nd place',
@@ -264,7 +264,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — second category certificate',
-    orig: null,
+    orig: 'СЕРТИФИКАТ — ВЫДАН [Лесхан Уаис] ЗА ВЫПОЛНЕНИЕ НОРМАТИВА II РАЗРЯДА В КВАЛИФИКАЦИОННОМ ТУРНИРЕ ПО ШАХМАТАМ · ГЛАВНЫЙ СУДЬЯ М. КАШЕВ · ШАХМАТНЫЙ КЛУБ «ШАХ И МАТ» · г. НУР-СУЛТАН',
     org: 'Chess club «Шах и мат» · Nur-Sultan',
     y: null,
     res: '2nd category',
@@ -275,7 +275,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — 1st place and third category norm',
-    orig: null,
+    orig: 'Диплом — НАГРАЖДАЕТСЯ [Лесхан Уаис] За занятое I место и выполнения нормы 3 разряда в квалификационном турнире по шахматам · Главный судья М.Кашев · Шахматный Клуб «ШАХ и МАТ»',
     org: 'Chess club «Шах и мат»',
     y: null,
     res: '1st place',
@@ -286,7 +286,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — third category certificate',
-    orig: null,
+    orig: 'СЕРТИФИКАТ — ВЫДАН [Лесхан Уаис] ЗА ВЫПОЛНЕНИЕ НОРМАТИВА III РАЗРЯДА В КВАЛИФИКАЦИОННОМ ТУРНИРЕ ПО ШАХМАТАМ · ГЛАВНЫЙ СУДЬЯ М. КАШЕВ · ШАХМАТНЫЙ КЛУБ «ШАХ И МАТ» · НУР-СУЛТАН 2021',
     org: 'Chess club «Шах и мат» · Nur-Sultan',
     y: 2021,
     res: '3rd category',
@@ -297,7 +297,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess tournament — 1st place',
-    orig: null,
+    orig: 'ГРАМОТА — НАГРАЖДАЕТСЯ [Лесхан Уаис] за занятое «I» место в шахматном турнире · Главный судья Ишмухаметов А.Р · Дата 5-12.06.2021 · г. Нур-Султан 2021г',
     org: 'Nur-Sultan',
     y: 2021,
     res: '1st place',
@@ -308,7 +308,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — fourth category norm',
-    orig: null,
+    orig: 'СЕРТИФИКАТ — ВЫДАН [Лесхан Уаис] за выполнение нормы «4» разряда по шахматам · Главный судья Ишмухаметов А.Р · Дата 5-12.06.2021 · г. Нур-Султан 2021г',
     org: 'Nur-Sultan',
     y: 2021,
     res: '4th category',
@@ -319,7 +319,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — 1st place, fifth category tournament',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] За занятое 1-е место в квалификационном турнире на пятый разряд · Академия шахмат «Гроссмейстер»',
     org: 'Grossmeister Chess Academy',
     y: null,
     res: '1st place',
@@ -330,7 +330,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'Chess — fifth category norm',
-    orig: null,
+    orig: 'СЕРТИФИКАТ — НАГРАЖДАЕТСЯ [Лесхан Уаис] За выполнение нормы пятого разряда в квалификационном турнире · Академия шахмат «Гроссмейстер»',
     org: 'Grossmeister Chess Academy',
     y: null,
     res: '5th category',
@@ -344,7 +344,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'KATL tennis — 1st place, Orange Ball',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] за I место в одиночном разряде среди мальчиков ORANGE BALL · Дата 05.12.21 · г. Нур-Султан · KATL, Kids Amateur Tennis League',
     org: 'Kids Amateur Tennis League · Nur-Sultan',
     y: 2021,
     res: '1st place',
@@ -355,7 +355,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'KATL tennis — 1st place, Orange Ball, second tournament',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] за I место в одиночном разряде среди мальчиков ORANGE BALL · Дата 09.10.202… (последняя цифра года обрезана) · г. Нур-Султан',
     org: 'Kids Amateur Tennis League · Nur-Sultan',
     y: null,
     res: '1st place',
@@ -366,7 +366,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'KATL tennis — 2nd place, Green Ball',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] за II место в одиночном разряде среди мальчиков GREEN BALL · Дата 26.12.2021 · г. Нур-Султан',
     org: 'Kids Amateur Tennis League · Nur-Sultan',
     y: 2021,
     res: '2nd place',
@@ -377,7 +377,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'KATL tennis — 3rd place, Green Ball, February',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] за III место в одиночном разряде среди мальчиков GREEN BALL · Дата 27.02.2022 · г. Нур-Султан',
     org: 'Kids Amateur Tennis League · Nur-Sultan',
     y: 2022,
     res: '3rd place',
@@ -388,7 +388,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'sport',
     t: 'KATL tennis — 3rd place, Green Ball, April',
-    orig: null,
+    orig: 'ДИПЛОМ — НАГРАЖДАЕТСЯ [Лесхан Уаис] за III место в одиночном разряде среди мальчиков GREEN BALL · Дата 10.04.2022 · г. Нур-Султан',
     org: 'Kids Amateur Tennis League · Nur-Sultan',
     y: 2022,
     res: '3rd place',
@@ -427,7 +427,7 @@ const ACHIEVEMENTS = [
   {
     cat: 'creative',
     t: 'NIS certificate of appreciation — dormitory life',
-    orig: null,
+    orig: 'CERTIFICATE OF APPRECIATION — certifies that [Лесхан Уаіс, 7 «F»] a student of Nazarbayev Intellectual School in Astana, has actively contributed to the development of creative life of the school’s dormitory and own talents · 2023-2024',
     org: 'Nazarbayev Intellectual School of Physics and Mathematics, Astana',
     y: 2024,
     res: 'certificate',
