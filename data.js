@@ -244,8 +244,8 @@ const ACHIEVEMENTS = [
     y: 2019,
     res: '4th gup',
     status: 'confirmed',
-    img: null,
-    note: 'Belt rank awarded 1 November 2019, Astana branch. The certificate prints a date of birth, so the scan is held back until that line is masked.'
+    img: 'tkd-belt-4-gup-2019.jpg',
+    note: 'Belt rank awarded 1 November 2019, Astana branch. The printed date of birth is masked in the scan.'
   },
 
   /* ---------- SPORT: chess ---------- */
@@ -454,33 +454,11 @@ const ACHIEVEMENTS = [
     t: 'NIS Hackathon — participant',
     orig: '«NIS Hackathon» байқауының мектепшілік кезеңі',
     org: 'Nazarbayev Intellectual School of Science and Mathematics, Nura district of Astana',
-    y: null,
+    y: 2025,
     res: 'participant',
     status: 'confirmed',
     img: 'nis-hackathon-participant.jpg',
-    note: 'Participant in the school stage of the NIS Hackathon, open to grades 9–12. The year is not printed on the certificate.'
-  },
-  {
-    cat: 'projects',
-    t: 'Future Minds Hackathon, Social Impact track',
-    orig: null,
-    org: 'Future Minds',
-    y: 2026,
-    res: 'certificate pending',
-    status: 'check',
-    img: null,
-    note: 'The Sabaqtas project. Update the result and attach the scan once the certificate arrives.'
-  },
-  {
-    cat: 'projects',
-    t: 'Second hackathon — certificate not found',
-    orig: null,
-    org: null,
-    y: null,
-    res: 'participant',
-    status: 'check',
-    img: null,
-    note: 'I recall a second hackathon with a participation award, but no certificate for it turned up in this batch. Either find it or drop this entry.'
+    note: 'Participant in the school stage of the NIS Hackathon, open to grades 9–12. The year is not printed on the certificate; 2025 is from my own recollection — it was around the start of my 9th-grade year, and it was my first contact with AI.'
   }
 
 ];
