@@ -294,7 +294,7 @@
     background:var(--accent);color:#FBF3E7;padding:4px 9px;border-radius:5px;
   }
   .card-body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .card-body h3{font-size:15px;font-weight:600;line-height:1.32;font-family:var(--body)}
+  .card-body .card-title{font-size:15px;font-weight:600;line-height:1.32;font-family:var(--body)}
   .card-meta{
     font-family:var(--mono);font-size:11px;color:var(--muted);
     display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px;
@@ -530,7 +530,7 @@
        19.8px apart - tight enough that a two-line title reads as one block of
        text. 1.42 separates the lines without changing the card height for the
        majority of titles, which are a single line. */
-    .card-body h3{line-height:1.42}
+    .card-body .card-title{line-height:1.42}
 
     .proj{grid-template-columns:44px 1fr;gap:14px}
     .proj-mark{width:44px;height:44px;font-size:15px}

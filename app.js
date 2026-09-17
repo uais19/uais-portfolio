@@ -477,11 +477,16 @@
        Space press it, and a screen reader announces it as a button. A <div>
        with a click handler would have none of that.
 
-       One honest caveat. HTML allows only inline content inside a <button>, so
-       the <div> and <h3> in here do not validate, and screen readers read the
-       <h3> as part of the button's name instead of listing it as a heading.
-       Every browser renders it correctly, and it matches the prototype - a
-       known trade-off, not an accident.
+       One honest caveat, now a smaller one. The title below is a <span
+       class="card-title">, not an <h3>, because a heading inside a <button>
+       is folded into the button's accessible name instead of being announced
+       as a heading. With 35 cards that hid the whole awards grid from heading
+       navigation, which is how a screen-reader user skims a page.
+
+       What is still not right: .thumb and .card-body are <div> elements, and
+       a <button> may only contain phrasing content, so the markup still does
+       not fully validate. Every browser renders it correctly. Replacing those
+       two wrappers is a separate step.
     */
     function renderCard(item) {
       var card = document.createElement('button');
@@ -532,9 +537,10 @@
       var body = document.createElement('div');
       body.className = 'card-body';
 
-      var h3 = document.createElement('h3');
-      h3.textContent = item.t;
-      body.appendChild(h3);
+      var title = document.createElement('span');
+      title.className = 'card-title';
+      title.textContent = item.t;
+      body.appendChild(title);
 
       var meta = document.createElement('div');
       meta.className = 'card-meta';
