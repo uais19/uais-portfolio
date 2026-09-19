@@ -554,3 +554,10 @@
        scale-in is removed outright, so nothing is left to run at all. */
     .lb-card{animation:none}
   }
+
+  /* Printing, or saving as PDF, does not scroll and does not run the
+     IntersectionObserver, so every block the reader never reached would print
+     as blank space. Same override as the reduced-motion rule above. */
+  @media print{
+    body.js .rv.pending{opacity:1;transform:none}
+  }
