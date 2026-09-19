@@ -74,7 +74,7 @@ const ACHIEVEMENTS = [
     res: 'Bronze Award',
     status: 'confirmed',
     img: 'sasmo-bronze-award-2026.jpg',
-    note: 'Singapore & Asian Schools Math Olympiad 2026. Certificate no. A0838666.'
+    note: 'Singapore & Asian Schools Math Olympiad 2026. Bronze Award for outstanding achievement in Grade 09. Certificate no. A0838666.'
   },
   {
     cat: 'study',
@@ -85,7 +85,7 @@ const ACHIEVEMENTS = [
     res: 'Bronze Award',
     status: 'confirmed',
     img: 'amo-bronze-award-2025.jpg',
-    note: 'American Mathematics Olympiad 2025, run by the Singapore International Mastery Contests Centre with Southern Illinois University. Certificate no. A0627761.'
+    note: 'American Mathematics Olympiad 2025, run by the Singapore International Mastery Contests Centre with Southern Illinois University. Bronze Award for outstanding achievement in Grade 9. Certificate no. A0627761.'
   },
   {
     cat: 'study',
@@ -96,7 +96,7 @@ const ACHIEVEMENTS = [
     res: 'Commendable Award',
     status: 'confirmed',
     img: 'singapore-math-challenge-commendable-2025.jpg',
-    note: 'Singapore Math Challenge 2025. Certificate no. A0592943.'
+    note: 'Singapore Math Challenge 2025. Commendable Award for outstanding achievement in Grade 9. Certificate no. A0592943.'
   },
   {
     cat: 'study',
@@ -156,18 +156,6 @@ const ACHIEVEMENTS = [
     img: 'nis-letter-to-parents-2025.jpg',
     note: 'School letter naming me one of its top students for results in subject olympiads. The letter is addressed to my parents; their names are masked on the scan.'
   },
-  {
-    cat: 'study',
-    t: 'Admission to Nazarbayev Intellectual School',
-    orig: '«Қымбатты дос! Сені Назарбаев Зияткерлік мектебіне түсуіңмен құттықтаймыз!» / «Дорогой друг! Поздравляем тебя с поступлением в Назарбаев Интеллектуальную школу!» / «Dear friend! Congratulations on your admission to the Nazarbayev Intellectual School!»',
-    org: 'Nazarbayev Intellectual Schools',
-    y: null,
-    res: 'admitted',
-    status: 'check',
-    img: 'nis-admission-letter.jpg',
-    note: 'Welcome letter issued on admission to NIS. The year still needs to be filled in, and this is a welcome letter rather than an exam certificate.'
-  },
-
   /* ---------- SPORT: taekwon-do ITF ---------- */
 
   {
@@ -190,7 +178,7 @@ const ACHIEVEMENTS = [
     res: '3rd place',
     status: 'confirmed',
     img: 'tkd-russian-open-3rd-team-sparring-2019.jpg',
-    note: 'Third place in team sparring at the same championship. My surname is misspelled on the certificate.'
+    note: 'Third place in team sparring at the same championship, 8–9 years old, 8–1 gup. This event was bracketed by belt grade rather than by weight. My surname is misspelled on the certificate.'
   },
   {
     cat: 'sport',
@@ -201,7 +189,7 @@ const ACHIEVEMENTS = [
     res: '3rd place',
     status: 'confirmed',
     img: 'tkd-russian-open-3rd-team-pattern-2019.jpg',
-    note: 'Third place in team pattern at the same championship. My surname is misspelled on the certificate.'
+    note: 'Third place in team pattern at the same championship, 8–9 years old, 8–1 gup. My surname is misspelled on the certificate.'
   },
   {
     cat: 'sport',
@@ -223,7 +211,7 @@ const ACHIEVEMENTS = [
     res: '1st place',
     status: 'confirmed',
     img: 'tkd-asian-club-1st-weight-category-2019.jpg',
-    note: 'Open Asian Taekwon-Do ITF Club Championship, Shymkent, 2019. First place; the weight category is handwritten and still needs to be read off the paper.'
+    note: 'Open Asian Taekwon-Do ITF Club Championship, Shymkent, 2019. First place in the 6–8 age group; the weight category is handwritten and cannot be read. The other Shymkent diploma is for the 8–9 age group, so the two are probably different events even though both print 2019.'
   },
   {
     cat: 'sport',
@@ -234,7 +222,7 @@ const ACHIEVEMENTS = [
     res: '1st place',
     status: 'confirmed',
     img: 'tkd-asian-club-1st-age-category-2019.jpg',
-    note: 'Second first-place diploma from the same championship, 8–9 age group. Which event this one was for is handwritten and needs confirming.'
+    note: 'Second first-place diploma from the Shymkent championship, 8–9 age group, weight category handwritten as −24. Both Shymkent diplomas print 2019 but name different age groups, so they are probably two different events.'
   },
   {
     cat: 'sport',
@@ -325,7 +313,7 @@ const ACHIEVEMENTS = [
     res: '1st place',
     status: 'confirmed',
     img: 'chess-grossmeister-1st-rank5.jpg',
-    note: 'First place in a qualifying tournament for the fifth category. No year printed; this is the earliest of the chess documents.'
+    note: 'First place in a qualifying tournament for the fifth category, at the Grossmeister chess academy. No year printed; this is the earliest of the chess documents. The ladder ran across three organisers: Grossmeister for the fifth category, A. Ishmukhametov\'s June 2021 tournament for the fourth, and the «Shakh i Mat» club for the third and second.'
   },
   {
     cat: 'sport',
@@ -336,7 +324,7 @@ const ACHIEVEMENTS = [
     res: '5th category',
     status: 'confirmed',
     img: 'chess-grossmeister-rank5-norm.jpg',
-    note: 'Certificate for the fifth-category norm. No year printed.'
+    note: 'Certificate for the fifth-category norm, Grossmeister chess academy. No year printed.'
   },
 
   /* ---------- SPORT: tennis ---------- */
@@ -361,7 +349,7 @@ const ACHIEVEMENTS = [
     res: '1st place',
     status: 'confirmed',
     img: 'tennis-katl-orange-ball-1st-a.jpg',
-    note: 'Another first place in boys\' singles, Orange Ball. The handwritten date reads 09.10 but the year is cut off — it is either 2021 or 2022.'
+    note: 'Another first place in boys\' singles, Orange Ball. The handwritten date reads 09.10 but the year is cut off. The blank prints Nur-Sultan, the city\'s name until September 2022, and the Green Ball results start in December 2021 — so 2020 or 2021 fit the progression, while 2022 would mean dropping back a category. Left unset rather than guessed.'
   },
   {
     cat: 'sport',
@@ -433,7 +421,7 @@ const ACHIEVEMENTS = [
     res: 'certificate',
     status: 'confirmed',
     img: 'nis-appreciation-dormitory-2024.jpg',
-    note: 'Awarded for the 2023–2024 year for contributing to the creative life of the school dormitory.'
+    note: 'Awarded for the 2023–2024 school year, grade 7, for contributing to the creative life of the school dormitory and to my own talents — the paper says both, and the second half is the only written trace of the dombra playing.'
   },
   {
     cat: 'creative',
@@ -469,6 +457,11 @@ const ACHIEVEMENTS = [
    =========================================================================== */
 
 const EXPERIENCE = [
+  {
+    t: 'Nazarbayev Intellectual School — admission',
+    period: 'ongoing',
+    note: 'Admitted to the Nazarbayev Intellectual School of Physics and Mathematics in Astana. The only paper I have for it is the welcome letter every admitted student receives: it carries no name and no date, so it is not evidence of anything personal and it is not in the awards grid. The earliest dated proof that I was studying there is the dormitory letter of appreciation for 2023–2024, grade 7.'
+  },
   {
     t: 'Deliox — founder',
     period: 'ongoing',
