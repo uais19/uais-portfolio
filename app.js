@@ -1,16 +1,22 @@
 /* ============================================================================
    app.js — behaviour shared by index.html and ru.html
 
-   Ported from design-preview.html, in six parts:
+   Ported from design-preview.html, in seven parts:
      1. the burger toggle
      2. closing the drawer when a link inside it is clicked
      3. the scrollspy that highlights the tab for the section you are looking at
      4. the awards grid: cards, category chips, year and status filters
      5. the lightbox that opens when a card is clicked
      6. the experience list, built from the EXPERIENCE array
-
-   The scroll-reveal animations live in the prototype and arrive in a later step.
+     7. the scroll reveal: each .rv block fades up the first time it is seen
    ========================================================================= */
+
+/* The very first line of code, and deliberately outside the IIFE below, so it
+   runs even if something further down throws. style.css hides .rv blocks only
+   under body.js - so a visitor with JavaScript switched off, or a script that
+   crashes before the reveal is set up, gets the whole page, fully visible,
+   instead of a blank column. */
+document.body.classList.add('js');
 
 /* ----------------------------------------------------------------------------
    LESSON 22 — THE IIFE, AND WHY WE WRAP EVERYTHING IN ONE
@@ -964,5 +970,72 @@
      missing id in one of the two HTML files cannot throw. */
   function setText(el, value) {
     if (el) el.textContent = value;
+  }
+
+  /* ==========================================================================
+     7. SCROLL REVEAL
+
+     LESSON 42 — IntersectionObserver
+
+     The obvious way to reveal blocks on scroll is a scroll listener that
+     measures every block with getBoundingClientRect() on every scroll event:
+     dozens of times a second, on the main thread, for blocks nowhere near the
+     screen. IntersectionObserver turns that around. You hand the browser a
+     list of elements once, and the BROWSER tells you when one comes into view.
+
+       threshold: [0, 0.12]           report when a block enters, and again
+                                      once 12% of it is visible
+       rootMargin: '0px 0px -8% 0px'  lift the bottom edge of the "screen" by
+                                      8%, so a block has to be properly on
+                                      screen, not one pixel past the fold
+
+     .pending is added here, never written into the HTML. If this code does not
+     run - a browser without IntersectionObserver, an error further up - then
+     nothing was ever hidden, and the page is simply static.
+     ========================================================================== */
+  if ('IntersectionObserver' in window) {
+    var reveal = document.querySelectorAll('.rv');
+
+    /* Hide every block INSTANTLY. The scrollspy and the grid above have
+       already made the browser work out the page's styles once, with every
+       block visible - so simply adding .pending would start the .55s
+       transition from visible to hidden, and the hero would still be almost
+       fully opaque when the observer adds .in. It would never fade in.
+       So: transitions off, .pending on, make the browser apply it now
+       (reading offsetHeight forces that), transitions back on. Only the
+       reveal animates, never the hiding. */
+    reveal.forEach(function (el) {
+      el.style.transition = 'none';
+      el.classList.add('pending');
+    });
+    void document.body.offsetHeight;
+    reveal.forEach(function (el) {
+      el.style.transition = '';
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+
+        /* A block normally waits until 12% of it is on screen. But a block so
+           tall that 12% of it is more than the whole screen could never get
+           there, and would stay invisible for good: on a phone the awards
+           grid is over 13,000px, and at most about 6% of it fits on screen.
+           Such a block is revealed the moment it enters. That is also why the
+           threshold list starts at 0 - so the browser reports the entry. */
+        var tooTall = en.boundingClientRect.height * 0.12 > en.rootBounds.height;
+        if (en.intersectionRatio < 0.12 && !tooTall) return;
+
+        en.target.classList.remove('pending');
+        en.target.classList.add('in');
+        /* Once is enough. Unobserving means scrolling back up never hides it
+           again, and the browser stops doing work for this block. */
+        io.unobserve(en.target);
+      });
+    }, { threshold: [0, 0.12], rootMargin: '0px 0px -8% 0px' });
+
+    reveal.forEach(function (el) {
+      io.observe(el);
+    });
   }
 })();
