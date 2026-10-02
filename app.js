@@ -903,20 +903,23 @@ document.body.classList.add('js');
 
      LESSON 40 — LET THE PAGE SAY WHAT IS ALREADY SHOWN
 
-     EXPERIENCE in data.js includes Deliox and QozGal, and both already have a
-     card in #projects. Listing them here too would show the same thing twice,
-     once as a project and once as experience.
+     EXPERIENCE in data.js includes QozGal, and QozGal already has a card in
+     #projects. Listing it here too would show the same thing twice, once as a
+     project and once as experience. Deliox and Sabaqtas are in EXPERIENCE as
+     well, but neither has a project card any more, so both are shown here as
+     experience.
 
-     The obvious fix is a hardcoded skip list: ['Deliox', 'QozGal']. It works
-     today, and it quietly goes wrong the day a fourth project card is added
-     to the HTML and nobody remembers that the list exists.
+     The obvious fix is a hardcoded skip list: ['QozGal']. It works today, and
+     it quietly goes wrong the day another project card is added to the HTML
+     and nobody remembers that the list exists - or the day a card is removed
+     and a name is left behind in the list, which is what happened to Deliox.
 
      So the skip list is READ FROM THE PAGE instead. The <h3> titles of the
      project cards ARE the list of what #projects already shows. An EXPERIENCE
      entry is skipped when the part of its title before " — " matches one:
 
-       'Deliox — founder'                    -> 'Deliox'    in #projects, skip
        'QozGal — a transit service for ...'  -> 'QozGal'    in #projects, skip
+       'Deliox — founder'                    -> 'Deliox'    not there, show
        'Football'                            -> 'Football'  not there, show
 
      One fact - "this is shown as a project" - lives in one place, the HTML,

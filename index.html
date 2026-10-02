@@ -388,7 +388,7 @@
              of 'projects' category entries in ACHIEVEMENTS - those are awards
              for projects, which is a different thing. Becomes computed when the
              projects section is rebuilt. -->
-        <div class="stat"><b>3</b><span>projects</span></div>
+        <div class="stat"><b>1</b><span>projects</span></div>
 
       </div>
     </section>
@@ -605,8 +605,8 @@
     <!-- ==================================================================
          SECTION: PROJECTS
 
-         Written by hand, not generated. Three projects that rarely change,
-         each a small piece of writing rather than a row of data. The awards
+         Written by hand, not generated. One project that rarely changes,
+         a small piece of writing rather than a row of data. The awards
          grid is the opposite case - many entries of the same shape, with
          filters - which is exactly when generating from an array pays off
          (LESSON 28).
@@ -617,14 +617,14 @@
          follow the page language - the same split as the "approximate" flag
          on an award card.
 
-         aria-hidden="true" on the monogram: "D X" read aloud is noise, and the
+         aria-hidden="true" on the monogram: "Q G" read aloud is noise, and the
          project's name is right beside it in the <h3>.
          ================================================================== -->
     <section class="sec wrap" id="projects">
 
       <div class="sec-head rv">
         <h2>Projects</h2>
-        <span class="count">3</span>
+        <span class="count">1</span>
       </div>
 
       <p class="sec-note rv">
@@ -635,29 +635,12 @@
       <div class="proj-list rv">
 
         <article class="proj">
-          <div class="proj-mark" aria-hidden="true">DX</div>
-          <div>
-            <h3>Deliox</h3>
-            <p>An AI trainer for cold sales calls.</p>
-          </div>
-          <span class="status wip">in progress</span>
-        </article>
-
-        <article class="proj">
           <div class="proj-mark" aria-hidden="true">QG</div>
           <div>
             <h3>QozGal</h3>
             <p>A Telegram bot that makes public transport in Astana easier to track.</p>
           </div>
           <span class="status wip">ongoing</span>
-        </article>
-
-        <article class="proj">
-          <div class="proj-mark" aria-hidden="true">SB</div>
-          <div>
-            <h3>Sabaqtas</h3>
-            <p>A Social Impact track project at the Future Minds Hackathon 2026.</p>
-          </div>
         </article>
 
       </div>
@@ -676,9 +659,9 @@
          applications, and a reader must be able to tell at a glance which
          lines a document backs up.
 
-         Deliox and QozGal are in EXPERIENCE too, but they already appear above
-         as projects, so app.js leaves them out here. It does not keep a list
-         of names to skip - it reads the <h3> titles of the project cards above
+         QozGal is in EXPERIENCE too, but it already appears above as a
+         project, so app.js leaves it out here. It does not keep a list of
+         names to skip - it reads the <h3> titles of the project cards above
          and skips any entry that matches. See LESSON 40 in app.js.
 
          role="list" is not redundant. Safari drops the list semantics from a

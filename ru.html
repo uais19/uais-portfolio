@@ -132,7 +132,7 @@
 
         <!-- ПОКА ЗАШИТО. Считает записи в секции #projects ниже, а не записи
              категории 'projects' в массиве — это разные вещи. -->
-        <div class="stat"><b>3</b><span>проекта</span></div>
+        <div class="stat"><b>1</b><span>проекта</span></div>
 
       </div>
     </section>
@@ -214,16 +214,16 @@
     </section>
 
     <!-- ================= ПРОЕКТЫ =================
-         Три проекта написаны в разметке вручную, не из массива. Описания —
-         по-английски, как и записи грамот: это первые предложения записей из
-         data.js. Подписи статусов — интерфейс, поэтому по-русски.
+         Один проект написан в разметке вручную, не из массива. Описание —
+         по-английски, как и записи грамот: это первое предложение записи из
+         data.js. Подпись статуса — интерфейс, поэтому по-русски.
          Подробнее — index.html, раздел PROJECTS.
          =========================================== -->
     <section class="sec wrap" id="projects">
 
       <div class="sec-head rv">
         <h2>Проекты</h2>
-        <span class="count">3</span>
+        <span class="count">1</span>
       </div>
 
       <p class="sec-note rv">
@@ -231,15 +231,6 @@
       </p>
 
       <div class="proj-list rv">
-
-        <article class="proj">
-          <div class="proj-mark" aria-hidden="true">DX</div>
-          <div>
-            <h3>Deliox</h3>
-            <p>An AI trainer for cold sales calls.</p>
-          </div>
-          <span class="status wip">в работе</span>
-        </article>
 
         <article class="proj">
           <div class="proj-mark" aria-hidden="true">QG</div>
@@ -250,21 +241,13 @@
           <span class="status wip">в работе</span>
         </article>
 
-        <article class="proj">
-          <div class="proj-mark" aria-hidden="true">SB</div>
-          <div>
-            <h3>Sabaqtas</h3>
-            <p>A Social Impact track project at the Future Minds Hackathon 2026.</p>
-          </div>
-        </article>
-
       </div>
 
     </section>
 
     <!-- ================= ОПЫТ =================
-         Строится в app.js из массива EXPERIENCE в data.js. Deliox и QozGal уже
-         есть выше как проекты, поэтому здесь пропускаются: app.js сверяется с
+         Строится в app.js из массива EXPERIENCE в data.js. QozGal уже есть
+         выше как проект, поэтому здесь пропускается: app.js сверяется с
          заголовками карточек проектов (app.js, УРОК 40). Зачем role="list" —
          index.html, раздел EXPERIENCE.
          ======================================== -->
