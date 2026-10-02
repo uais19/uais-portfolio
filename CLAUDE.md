@@ -57,6 +57,12 @@ directly, by hand and by other tools, between one message and the next. A tree-w
 throws that work away silently: the file goes back to HEAD, and nothing in the output says
 a foreign edit was destroyed.
 
+The one incident behind this rule is explained, and it was not git. The site owner's
+assistant reused a single output filename through a relay that served back a stale copy, so
+an older `data.js` was written over a newer one. No git command and no Claude Code session
+discarded anything. The rules below stand anyway — outside edits are real and a discard is
+still unrecoverable — but the cause is known, not an open mystery to re-investigate.
+
 To undo your own experiment, revert the specific lines you wrote, or name the exact file you
 touched. Prefer not writing the experiment to disk at all — a temporary change made to test
 rendering belongs in the browser's page memory, not in a tracked file.
@@ -75,6 +81,20 @@ you read earlier silently drops whatever arrived in between. Never rewrite `data
 wholesale: re-read it immediately before touching it, and edit specific lines only. Better
 still, do not write to `data.js` at all — you may read it, and you may `git add` and
 `git commit` it. Editing it is not your job.
+
+### The one exception: /intake
+
+The blanket "do not write to `data.js`" above stands, with exactly one exception: the
+`/intake` command in `.claude/commands/intake.md`. Working under that command you may
+**append** new entries — and only append:
+
+- Re-read `data.js` immediately before writing, every time, so you are appending to what is
+  on disk now and not to a copy you read earlier in the session.
+- Insert whole new objects at the end of a category block, or at the end of the array.
+- Never modify, reformat or reorder an existing line, and never rewrite the file wholesale.
+
+Everything else about `data.js` is unchanged. Outside of `/intake` you may read it, `git add`
+it and `git commit` it, and that is all.
 
 If you need a clean tree before committing, commit `data.js` alone, in its own commit, and
 say what was in it. Never discard to get a clean tree.
