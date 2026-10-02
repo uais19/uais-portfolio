@@ -473,6 +473,11 @@ const EXPERIENCE = [
     note: 'A Telegram bot that makes public transport in Astana easier to track: it picks the right bus and tells you when to get off. A bot for now. Roughly 50–60% done. The blocker is access to real-time bus movement data.'
   },
   {
+    t: 'Sabaqtas — Future Minds Hackathon 2026',
+    period: 'one hackathon, 2026',
+    note: 'A project for the Social Impact track of the Future Minds Hackathon 2026. The hackathon certificate was issued to the team and not in my name, so there is no personal document behind it and it is not in the awards grid.'
+  },
+  {
     t: 'Sales experience',
     period: 'a few weeks',
     note: 'Cold calls, conversations with prospects, handling objections. Both Deliox and the Daryn research topic came out of this.'
